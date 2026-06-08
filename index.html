@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PriceAccess Navigator — Kubra Meydanli</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f9f8f5; color: #2C2C2A; line-height: 1.5; padding: 2rem 1rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 2.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: #E1F5EE; color: #085041; margin-bottom: 10px; }
+    h1 { font-size: 28px; font-weight: 600; color: #1a1a18; margin-bottom: 4px; }
+    .subtitle { font-size: 14px; color: #666662; margin-bottom: 1.5rem; }
+    hr { border: none; border-top: 0.5px solid #e0ddd6; margin: 1.25rem 0; }
+    .sec-title { font-size: 11px; font-weight: 600; color: #999896; text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: 6px; border-bottom: 0.5px solid #e0ddd6; margin-bottom: 12px; }
+    .card { background: #fff; border: 0.5px solid #e0ddd6; border-radius: 10px; padding: 1rem 1.25rem; }
+    .card-label { font-size: 11px; font-weight: 500; color: #999896; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat-card { background: #f5f3ee; border-radius: 8px; padding: 0.85rem 1rem; }
+    .stat-label { font-size: 12px; color: #666662; margin-bottom: 4px; }
+    .stat-value { font-size: 22px; font-weight: 600; color: #1a1a18; }
+    .stat-sub { font-size: 11px; color: #999896; margin-top: 2px; }
+    .uc-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+    .uc-row:last-child { margin-bottom: 0; }
+    .uc-num { font-size: 11px; font-weight: 600; width: 32px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .uc-text { font-size: 13px; color: #555553; line-height: 1.45; }
+    .uc-title { font-weight: 600; color: #1a1a18; }
+    .tag-blue { background: #E6F1FB; color: #0C447C; }
+    .tag-teal { background: #E1F5EE; color: #085041; }
+    .tag-amber { background: #FAEEDA; color: #633806; }
+    .tag-purple { background: #EEEDFE; color: #3C3489; }
+    .tag-coral { background: #FAECE7; color: #712B13; }
+    .ai-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+    .ai-row:last-child { margin-bottom: 0; }
+    .ai-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .ai-text { font-size: 13px; color: #555553; line-height: 1.45; }
+    .ai-title { font-weight: 600; color: #1a1a18; }
+    .market-pill { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; margin: 2px 3px 2px 0; background: #f5f3ee; color: #555553; border: 0.5px solid #e0ddd6; }
+    .tag { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 20px; margin: 2px 3px 2px 0; }
+    .domain-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
+    .domain-row:last-child { margin-bottom: 0; }
+    .domain-dot { width: 3px; border-radius: 2px; flex-shrink: 0; margin-top: 4px; align-self: stretch; background: #1D9E75; }
+    .domain-text { font-size: 12px; color: #666662; line-height: 1.45; }
+    .domain-title { font-weight: 600; color: #1a1a18; }
+    .phase-wrap { display: flex; }
+    .phase-box { flex: 1; padding: 8px; text-align: center; border: 0.5px solid #e0ddd6; border-right: none; font-size: 11px; }
+    .phase-box:first-child { border-radius: 6px 0 0 6px; border-left: 0.5px solid #e0ddd6; }
+    .phase-box:last-child { border-radius: 0 6px 6px 0; border-right: 0.5px solid #e0ddd6; }
+    .ph-num { font-size: 10px; color: #999896; }
+    .ph-label { font-size: 11px; font-weight: 600; color: #1a1a18; }
+    .phase-box.done { background: #E1F5EE; }
+    .phase-box.done .ph-label { color: #085041; }
+    .caveat-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
+    .caveat-row:last-child { margin-bottom: 0; }
+    .caveat-icon { font-size: 13px; color: #999896; flex-shrink: 0; margin-top: 2px; }
+    .caveat-text { font-size: 13px; color: #555553; line-height: 1.45; }
+    .caveat-title { font-weight: 600; color: #1a1a18; }
+    .footer-strip { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; padding-top: 1rem; border-top: 0.5px solid #e0ddd6; }
+    .footer-item { font-size: 12px; color: #999896; display: flex; align-items: center; gap: 5px; }
+    @media (max-width: 600px) {
+      .three-col { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .phase-wrap { flex-wrap: wrap; }
+      .phase-box { flex: 1 1 45%; border: 0.5px solid #e0ddd6; border-radius: 6px; margin: 2px; }
+      .page { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <span class="badge">Project &middot; Phase 1 complete</span>
+    <h1>PriceAccess Navigator</h1>
+    <p class="subtitle">AI-augmented decision support for pharmaceutical pricing &amp; market access &mdash; Kubra Meydanli</p>
+
+    <hr>
+
+    <p class="sec-title">The problem</p>
+    <div class="card" style="margin-bottom:12px">
+      <p style="font-size:13px;color:#555553;line-height:1.6">Pricing and market access teams work in silos &mdash; without shared visibility into how a single price change in one market cascades across reference pricing baskets and downstream access outcomes. Most mid-sized pharma companies still manage this in Excel, with no probabilistic scenario modelling.</p>
+    </div>
+    <div class="three-col" style="margin-bottom:0">
+      <div class="stat-card" style="display:flex;flex-direction:column;min-height:100px;"><p class="stat-label">Countries using IRP as their primary pricing mechanism</p><p class="stat-value" style="margin-top:auto;padding-top:8px;">71%</p><p class="stat-sub"><a href="https://www.modeln.com/products/global-pricing-management/" target="_blank" style="color:#999896;text-decoration:underline;text-underline-offset:2px;">Model N &middot; 2025 &rarr;</a></p></div>
+      <div class="stat-card" style="display:flex;flex-direction:column;min-height:100px;"><p class="stat-label">Share of specialty drugs in global pharma spend</p><p class="stat-value" style="margin-top:auto;padding-top:8px;">55%</p><p class="stat-sub"><a href="https://pharmuni.com/2025/12/25/market-access-pharma-courses-skills-frameworks-real-world-applications-year-guide/" target="_blank" style="color:#999896;text-decoration:underline;text-underline-offset:2px;">Pharmuni &middot; 2026 &rarr;</a></p></div>
+      <div class="stat-card" style="display:flex;flex-direction:column;min-height:100px;"><p class="stat-label">EU HTA Regulation &mdash; Joint Clinical Assessments now mandatory</p><p class="stat-value" style="margin-top:auto;padding-top:8px;">Live</p><p class="stat-sub"><a href="https://health.ec.europa.eu/medicinal-products/regulation-eu-20212282-health-technology-assessment_en" target="_blank" style="color:#999896;text-decoration:underline;text-underline-offset:2px;">EC Regulation 2021/2282 &rarr;</a></p></div>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">Solution approach (MVP)</p>
+    <div class="two-col">
+      <div class="card">
+        <p class="card-label">Core use cases</p>
+        <div class="uc-row"><span class="uc-num tag-blue">UC1</span><span class="uc-text"><span class="uc-title">Launch pricing scenarios</span> &mdash; simulate IRP cascade across all 6 markets from any lead-market price change</span></div>
+        <div class="uc-row"><span class="uc-num tag-teal">UC2</span><span class="uc-text"><span class="uc-title">Tender response simulation</span> &mdash; evaluate discount impact before committing to a tender price</span></div>
+        <div class="uc-row"><span class="uc-num tag-amber">UC3</span><span class="uc-text"><span class="uc-title">HTA outcome stress test</span> &mdash; model negative HTA decisions on portfolio revenue and adjacent markets</span></div>
+      </div>
+      <div class="card">
+        <p class="card-label">AI integration (Claude API)</p>
+        <div class="ai-row"><div class="ai-dot" style="background:#1D9E75"></div><p class="ai-text"><span class="ai-title">IRP rule parsing</span> &mdash; country rules in plain English, converted to executable logic at runtime</p></div>
+        <div class="ai-row"><div class="ai-dot" style="background:#378ADD"></div><p class="ai-text"><span class="ai-title">Narrative generation</span> &mdash; cascade results turned into summaries ready for leadership meetings</p></div>
+        <div class="ai-row"><div class="ai-dot" style="background:#7F77DD"></div><p class="ai-text"><span class="ai-title">Natural language input</span> &mdash; type a free-form scenario, receive structured parameters back</p></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="two-col">
+      <div>
+        <p class="sec-title">Markets covered</p>
+        <div style="margin-bottom:8px">
+          <span class="market-pill">DE &middot; Germany</span><span class="market-pill">FR &middot; France</span><span class="market-pill">NL &middot; Netherlands</span><span class="market-pill">UK &middot; United Kingdom</span><span class="market-pill">ES &middot; Spain</span><span class="market-pill">TR &middot; Turkey</span>
+        </div>
+        <p style="font-size:12px;color:#999896">Free-pricing (DE, UK), HTA-driven (FR, NL), IRP-heavy (TR). Includes key non-EU reference market.</p>
+      </div>
+      <div>
+        <p class="sec-title">Tech stack &amp; domain coverage</p>
+        <div style="margin-bottom:10px">
+          <span class="tag tag-teal">Python</span><span class="tag tag-purple">Claude API</span><span class="tag tag-amber">Monte Carlo</span><span class="tag tag-coral">Synthetic data</span>
+        </div>
+        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">IRP cascade mechanics</span> &mdash; basket logic, calculation rules</p></div>
+        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">Market access dynamics</span> &mdash; HTA pathways, CE thresholds</p></div>
+        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">Specialty pricing strategy</span> &mdash; tender management, net/list layering</p></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">Build plan</p>
+    <div class="phase-wrap">
+      <div class="phase-box done"><div class="ph-num">Phase 1</div><div class="ph-label">Problem brief ✓</div></div>
+      <div class="phase-box"><div class="ph-num">Phase 2</div><div class="ph-label">Data + cascade engine</div></div>
+      <div class="phase-box"><div class="ph-num">Phase 3</div><div class="ph-label">Access layer + AI</div></div>
+      <div class="phase-box"><div class="ph-num">Phase 4</div><div class="ph-label">Dashboard + publish</div></div>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">Honest caveats</p>
+    <div class="two-col">
+      <div>
+        <div class="caveat-row"><i class="fa-solid fa-database caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Synthetic data only</span> &mdash; no real pricing conclusions can be drawn</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-sliders caveat-icon"></i><p class="caveat-text"><span class="caveat-title">IRP rules simplified</span> &mdash; political overrides not modelled</p></div>
+      </div>
+      <div>
+        <div class="caveat-row"><i class="fa-solid fa-microscope caveat-icon"></i><p class="caveat-text"><span class="caveat-title">HTA thresholds are heuristics</span> &mdash; qualitative factors excluded</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-robot caveat-icon"></i><p class="caveat-text"><span class="caveat-title">LLM outputs are illustrative</span> &mdash; human review required</p></div>
+      </div>
+    </div>
+
+    <div class="footer-strip">
+      <span class="footer-item"><i class="fa-solid fa-user"></i> Kubra Meydanli</span>
+      <span class="footer-item"><i class="fa-solid fa-file-lines"></i> Phase 1 complete &middot; v1.0</span>
+      <span class="footer-item"><i class="fa-solid fa-globe"></i> Live demo &middot; Phase 4</span>
+    </div>
+
+  </div>
+</body>
+</html>
