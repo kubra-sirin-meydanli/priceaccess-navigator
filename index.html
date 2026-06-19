@@ -32,7 +32,6 @@
     .tag-amber { background: #FAEEDA; color: #633806; }
     .tag-purple { background: #EEEDFE; color: #3C3489; }
     .tag-coral { background: #FAECE7; color: #712B13; }
-    .demo-tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 20px; background: #0C447C; color: #fff; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; }
     .ai-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
     .ai-row:last-child { margin-bottom: 0; }
     .ai-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
@@ -60,27 +59,55 @@
     .caveat-title { font-weight: 600; color: #1a1a18; }
     .footer-strip { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; padding-top: 1rem; border-top: 0.5px solid #e0ddd6; }
     .footer-item { font-size: 12px; color: #999896; display: flex; align-items: center; gap: 5px; }
+
+    /* ── Cascade Calculator ── */
+    .calc-wrap { background: #f5f3ee; border-radius: 10px; padding: 1.25rem; }
+    .calc-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    .calc-field label { display: block; font-size: 11px; font-weight: 600; color: #999896; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+    .calc-field select, .calc-field input[type=number] {
+      width: 100%; padding: 7px 10px; border: 0.5px solid #d4d1ca; border-radius: 6px;
+      background: #fff; font-size: 13px; color: #1a1a18; outline: none;
+      transition: border-color 0.15s;
+    }
+    .calc-field select:focus, .calc-field input[type=number]:focus { border-color: #1D9E75; }
+    .calc-field input[type=number] { font-family: 'SF Mono', 'Fira Mono', monospace; }
+    .cascade-table { width: 100%; border-collapse: collapse; }
+    .cascade-table th { font-size: 10px; font-weight: 600; color: #999896; text-transform: uppercase; letter-spacing: 0.05em; padding: 5px 8px; text-align: left; border-bottom: 0.5px solid #d4d1ca; }
+    .cascade-table td { font-size: 12px; padding: 7px 8px; border-bottom: 0.5px solid #ebe8e1; color: #555553; vertical-align: middle; }
+    .cascade-table tr:last-child td { border-bottom: none; }
+    .cascade-table tr.trigger-row td { background: #fff8e6; }
+    .cascade-table tr.affected-row td { background: #f0faf5; }
+    .cascade-table tr.nochange-row td { opacity: 0.6; }
+    .price-mono { font-family: 'SF Mono', 'Fira Mono', monospace; font-size: 12px; font-weight: 600; color: #1a1a18; }
+    .delta-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+    .delta-neg { background: #FAEEDA; color: #633806; }
+    .delta-zero { background: #f5f3ee; color: #999896; }
+    .delta-trigger { background: #E6F1FB; color: #0C447C; }
+    .cascade-note { font-size: 11px; color: #999896; margin-top: 10px; font-style: italic; }
+    .rule-chip { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 20px; background: #e0ddd6; color: #666662; }
+
     @media (max-width: 600px) {
       .three-col { grid-template-columns: 1fr; }
       .two-col { grid-template-columns: 1fr; }
       .phase-wrap { flex-wrap: wrap; }
       .phase-box { flex: 1 1 45%; border: 0.5px solid #e0ddd6; border-radius: 6px; margin: 2px; }
       .page { padding: 1.25rem; }
+      .calc-inputs { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="page">
 
-    <span class="badge">Portfolio project &middot; Phase 1 complete</span>
+    <span class="badge">Portfolio project &middot; Phase 2 in progress</span>
     <h1>PriceAccess Navigator</h1>
-    <p class="subtitle">AI augmented decision support for pharmaceutical pricing &amp; market access &middot; Kubra Meydanli</p>
+    <p class="subtitle">AI-augmented decision support for pharmaceutical pricing &amp; market access &mdash; Kubra Meydanli</p>
 
     <hr>
 
     <p class="sec-title">The problem</p>
     <div class="card" style="margin-bottom:12px">
-      <p style="font-size:13px;color:#555553;line-height:1.6">Pricing and market access teams work in silos, without shared visibility into how a single price change in one market cascades across reference pricing baskets and downstream access outcomes. Most pharma companies still manage this in Excel, with no probabilistic scenario modelling.</p>
+      <p style="font-size:13px;color:#555553;line-height:1.6">Pricing and market access teams work in silos &mdash; without shared visibility into how a single price change in one market cascades across reference pricing baskets and downstream access outcomes. Most mid-sized pharma companies still manage this in Excel, with no probabilistic scenario modelling.</p>
     </div>
     <div class="three-col" style="margin-bottom:0">
       <div class="stat-card"><p class="stat-label">Countries using IRP</p><p class="stat-value">71%</p><p class="stat-sub">as primary mechanism &middot; Model N 2025</p></div>
@@ -94,15 +121,15 @@
     <div class="two-col">
       <div class="card">
         <p class="card-label">Core use cases</p>
-        <div class="uc-row"><span class="uc-num tag-blue">UC1</span><span class="uc-text"><span class="uc-title">Mandatory price change cascade</span> <span class="demo-tag">Demo focus</span>: a regulated price change in one market (AMNOG, CEPS, CIPM), recalculated across every market that references it.</span></div>
-        <div class="uc-row"><span class="uc-num tag-teal">UC2</span><span class="uc-text"><span class="uc-title">Launch sequence optimisation</span>: test launch order and lead price as reference baskets fill market by market, before launch.</span></div>
-        <div class="uc-row"><span class="uc-num tag-amber">UC3</span><span class="uc-text"><span class="uc-title">HTA outcome stress test</span>: model a restricted or negative HTA outcome on revenue and adjacent markets.</span></div>
+        <div class="uc-row"><span class="uc-num tag-blue">UC1</span><span class="uc-text"><span class="uc-title">Mandatory price change cascade</span> &mdash; a regulated cut in one market (AMNOG, CEPS, CIPM) recalculated across every market that references it. <span style="font-size:11px;color:#0C447C;font-weight:500">Risk prevention &middot; compliance assurance</span></span></div>
+        <div class="uc-row"><span class="uc-num tag-teal">UC2</span><span class="uc-text"><span class="uc-title">Launch sequence optimisation</span> &mdash; test launch order and lead price as reference baskets fill market by market, before launch. <span style="font-size:11px;color:#085041;font-weight:500">Revenue uplift &middot; decision optimisation</span></span></div>
+        <div class="uc-row"><span class="uc-num tag-amber">UC3</span><span class="uc-text"><span class="uc-title">HTA outcome stress test</span> &mdash; model a restricted or negative HTA outcome on revenue and adjacent markets. <span style="font-size:11px;color:#633806;font-weight:500">Risk prevention &middot; HTA negotiation readiness</span></span></div>
       </div>
       <div class="card">
         <p class="card-label">AI integration (Claude API)</p>
-        <div class="ai-row"><div class="ai-dot" style="background:#1D9E75"></div><p class="ai-text"><span class="ai-title">IRP rule parsing</span>: country rules in plain English, converted to executable logic at runtime</p></div>
-        <div class="ai-row"><div class="ai-dot" style="background:#378ADD"></div><p class="ai-text"><span class="ai-title">Narrative generation</span>: cascade results turned into summaries ready for leadership meetings</p></div>
-        <div class="ai-row"><div class="ai-dot" style="background:#7F77DD"></div><p class="ai-text"><span class="ai-title">Natural language input</span>: type a scenario in plain words, receive structured parameters back</p></div>
+        <div class="ai-row"><div class="ai-dot" style="background:#1D9E75"></div><p class="ai-text"><span class="ai-title">IRP rule parsing</span> &mdash; country rules in plain English, converted to executable logic at runtime</p></div>
+        <div class="ai-row"><div class="ai-dot" style="background:#378ADD"></div><p class="ai-text"><span class="ai-title">Narrative generation</span> &mdash; cascade results turned into summaries ready for leadership meetings</p></div>
+        <div class="ai-row"><div class="ai-dot" style="background:#7F77DD"></div><p class="ai-text"><span class="ai-title">Natural language input</span> &mdash; type a free-form scenario, receive structured parameters back</p></div>
       </div>
     </div>
 
@@ -114,19 +141,16 @@
         <div style="margin-bottom:8px">
           <span class="market-pill">DE &middot; Germany</span><span class="market-pill">FR &middot; France</span><span class="market-pill">NL &middot; Netherlands</span><span class="market-pill">UK &middot; United Kingdom</span><span class="market-pill">ES &middot; Spain</span><span class="market-pill">TR &middot; Turkey</span>
         </div>
-        <p style="font-size:12px;color:#999896">Free pricing (DE, UK), HTA driven (FR, NL), IRP heavy (TR). Includes a key reference market outside the EU.</p>
+        <p style="font-size:12px;color:#999896">Free-pricing (DE, UK), HTA-driven (FR, NL), IRP-heavy (TR). Includes key non-EU reference market.</p>
       </div>
       <div>
         <p class="sec-title">Tech stack &amp; domain coverage</p>
         <div style="margin-bottom:10px">
-          <span style="font-size:10px;font-weight:600;color:#999896;text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:5px">Demo scope</span>
-          <span class="tag tag-teal">Python</span><span class="tag tag-blue">Cascade engine</span><span class="tag tag-purple">Claude API</span><span class="tag tag-coral">Streamlit</span><span class="tag tag-teal">Synthetic data</span>
-          <span style="font-size:10px;font-weight:600;color:#999896;text-transform:uppercase;letter-spacing:0.04em;display:block;margin:9px 0 5px">Roadmap (UC2 / UC3)</span>
-          <span class="tag tag-amber">Monte Carlo</span>
+          <span class="tag tag-teal">Python</span><span class="tag tag-blue">Streamlit</span><span class="tag tag-purple">Claude API</span><span class="tag tag-amber">Monte Carlo</span><span class="tag tag-coral">Synthetic data</span>
         </div>
-        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">IRP cascade mechanics</span>: basket logic, calculation rules</p></div>
-        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">Market access dynamics</span>: HTA pathways, CE thresholds</p></div>
-        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">Specialty pricing strategy</span>: tender management, net/list layering</p></div>
+        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">IRP cascade mechanics</span> &mdash; basket logic, calculation rules</p></div>
+        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">Market access dynamics</span> &mdash; HTA pathways, CE thresholds</p></div>
+        <div class="domain-row"><div class="domain-dot"></div><p class="domain-text"><span class="domain-title">Specialty pricing strategy</span> &mdash; tender management, net/list layering</p></div>
       </div>
     </div>
 
@@ -135,7 +159,7 @@
     <p class="sec-title">Build plan</p>
     <div class="phase-wrap">
       <div class="phase-box done"><div class="ph-num">Phase 1</div><div class="ph-label">Problem brief ✓</div></div>
-      <div class="phase-box"><div class="ph-num">Phase 2</div><div class="ph-label">Data + cascade engine</div></div>
+      <div class="phase-box" style="background:#FAEEDA;border-color:#e8d8b8"><div class="ph-num" style="color:#999896">Phase 2</div><div class="ph-label" style="color:#633806">Data + cascade engine →</div></div>
       <div class="phase-box"><div class="ph-num">Phase 3</div><div class="ph-label">Access layer + AI</div></div>
       <div class="phase-box"><div class="ph-num">Phase 4</div><div class="ph-label">Dashboard + publish</div></div>
     </div>
@@ -145,22 +169,175 @@
     <p class="sec-title">Honest caveats</p>
     <div class="two-col">
       <div>
-        <div class="caveat-row"><i class="fa-solid fa-database caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Synthetic data only</span>: no real pricing conclusions can be drawn</p></div>
-        <div class="caveat-row"><i class="fa-solid fa-sliders caveat-icon"></i><p class="caveat-text"><span class="caveat-title">IRP rules simplified</span>: political overrides not modelled</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-database caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Synthetic data only</span> &mdash; no real pricing conclusions can be drawn</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-sliders caveat-icon"></i><p class="caveat-text"><span class="caveat-title">IRP rules simplified</span> &mdash; political overrides not modelled</p></div>
       </div>
       <div>
-        <div class="caveat-row"><i class="fa-solid fa-microscope caveat-icon"></i><p class="caveat-text"><span class="caveat-title">HTA thresholds are heuristics</span>: qualitative factors excluded</p></div>
-        <div class="caveat-row"><i class="fa-solid fa-robot caveat-icon"></i><p class="caveat-text"><span class="caveat-title">LLM outputs are illustrative</span>: human review required</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-microscope caveat-icon"></i><p class="caveat-text"><span class="caveat-title">HTA thresholds are heuristics</span> &mdash; qualitative factors excluded</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-robot caveat-icon"></i><p class="caveat-text"><span class="caveat-title">LLM outputs are illustrative</span> &mdash; human review required</p></div>
       </div>
     </div>
 
+    <!-- ── IRP Cascade Calculator ── -->
+    <hr>
+    <p class="sec-title">IRP cascade calculator <span style="font-size:10px;font-weight:400;color:#1D9E75;text-transform:none;letter-spacing:0;margin-left:6px">&#9679; live</span></p>
+    <p style="font-size:12px;color:#999896;margin-bottom:12px">Showing <strong style="color:#555553">round 1 propagation only</strong> — a single mandatory price cut in the trigger market, applied to all markets that directly reference it. The full demo (Phase 4) will show R1→R2→R3 multi-round cascade as downstream prices become new reference inputs.</p>
+    <div class="calc-wrap">
+      <div class="calc-inputs">
+        <div class="calc-field">
+          <label>Trigger market</label>
+          <select id="triggerMarket" onchange="runCascade()">
+            <option value="DE">Germany (DE)</option>
+            <option value="FR">France (FR)</option>
+            <option value="NL">Netherlands (NL)</option>
+            <option value="UK">United Kingdom (UK)</option>
+            <option value="ES" selected>Spain (ES)</option>
+            <option value="TR">Turkey (TR)</option>
+          </select>
+        </div>
+        <div class="calc-field">
+          <label>New ex-factory list price (€)</label>
+          <input type="number" id="triggerPrice" value="820" min="100" max="5000" step="10" oninput="runCascade()">
+        </div>
+      </div>
+      <table class="cascade-table" id="cascadeTable">
+        <thead>
+          <tr>
+            <th>Market</th>
+            <th>IRP rule applied</th>
+            <th>Baseline price (€)</th>
+            <th>New ceiling (€)</th>
+            <th>Δ vs baseline</th>
+          </tr>
+        </thead>
+        <tbody id="cascadeBody"></tbody>
+      </table>
+      <p class="cascade-note" id="cascadeNote"></p>
+    </div>
+
+    <hr>
+
     <div class="footer-strip">
       <span class="footer-item"><i class="fa-solid fa-user"></i> Kubra Meydanli</span>
-      <span class="footer-item"><i class="fa-solid fa-file-lines"></i> Phase 1 complete &middot; v1.2</span>
+      <span class="footer-item"><i class="fa-solid fa-file-lines"></i> Phase 2 in progress &middot; v1.3</span>
       <span class="footer-item"><i class="fa-solid fa-globe"></i> Live Streamlit demo &middot; Phase 4</span>
     </div>
 
   </div>
-  <script data-goatcounter="https://kubra-meydanli.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script>
+// ── Baseline prices (ex-factory list, EUR) ──
+const MARKETS = {
+  DE: { name: 'Germany',     flag: '🇩🇪', base: 980  },
+  FR: { name: 'France',      flag: '🇫🇷', base: 860  },
+  NL: { name: 'Netherlands', flag: '🇳🇱', base: 870  },
+  UK: { name: 'United Kingdom', flag: '🇬🇧', base: 900 },
+  ES: { name: 'Spain',       flag: '🇪🇸', base: 820  },
+  TR: { name: 'Turkey',      flag: '🇹🇷', base: 650  },
+};
+
+// IRP basket rules: who references whom, and by what rule
+// trigger → affected markets & their ceiling logic
+const BASKET_RULES = {
+  DE: {
+    affects: [],
+    selfRule: 'AMNOG Erstattungsbetrag — self-contained',
+    note: 'Germany is the highest-price market and not a binding minimum in any reference basket. A German price cut has Δ = 0 on all other modelled markets.'
+  },
+  ES: {
+    affects: ['FR', 'NL'],
+    rules: {
+      FR: { label: 'CEPS — MIN(basket avg)', factor: 0.95 },
+      NL: { label: 'ZIN — MIN(basket)', factor: 1.00 }
+    },
+    note: 'Spain is a low-price anchor. A Spanish price cut cascades to France (CEPS basket average ×0.95 applied) and Netherlands (ZIN MIN rule).'
+  },
+  FR: {
+    affects: ['NL'],
+    rules: {
+      NL: { label: 'ZIN — MIN(basket)', factor: 1.00 }
+    },
+    note: 'France feeds the ZIN basket. A French price cut may lower the Netherlands ceiling if France becomes the new minimum.'
+  },
+  NL: {
+    affects: [],
+    selfRule: 'ZIN basket consumer — no downstream referencing modelled',
+    note: 'Netherlands is a basket consumer in this model. A NL price cut does not propagate further in the 6-market scope.'
+  },
+  UK: {
+    affects: [],
+    selfRule: 'VPAS free-pricing — not referenced by modelled markets',
+    note: 'UK operates under VPAS. None of the other 5 markets reference UK ex-factory price directly in this model.'
+  },
+  TR: {
+    affects: [],
+    selfRule: 'TİTCK sabit kur (fixed EUR rate) — internal ceiling only',
+    note: 'Turkey applies a fixed EUR→TRY reference rate set by TİTCK. Turkish list price changes are domestically driven and do not cascade outward in this basket.'
+  }
+};
+
+function fmt(n) {
+  return '€' + Math.round(n).toLocaleString('en-EU');
+}
+
+function runCascade() {
+  const trigger = document.getElementById('triggerMarket').value;
+  const newPrice = parseFloat(document.getElementById('triggerPrice').value) || 0;
+  const rules = BASKET_RULES[trigger];
+  const affectedSet = new Set(rules.affects || []);
+  const order = ['DE','FR','NL','UK','ES','TR'];
+  let rows = '';
+
+  for (const mkt of order) {
+    const m = MARKETS[mkt];
+    const isTrigger = mkt === trigger;
+    const isAffected = affectedSet.has(mkt);
+    let ruleLabel = '—';
+    let newCeiling = m.base;
+    let delta = 0;
+    let rowClass = 'nochange-row';
+    let deltaBadge = '';
+
+    if (isTrigger) {
+      rowClass = 'trigger-row';
+      ruleLabel = `<span class="rule-chip">Trigger market</span>`;
+      newCeiling = newPrice;
+      delta = newPrice - m.base;
+      const pct = m.base > 0 ? ((delta / m.base) * 100).toFixed(1) : 0;
+      deltaBadge = `<span class="delta-badge delta-trigger">${delta >= 0 ? '+' : ''}${pct}%</span>`;
+    } else if (isAffected) {
+      rowClass = 'affected-row';
+      const rule = rules.rules[mkt];
+      ruleLabel = `<span class="rule-chip">${rule.label}</span>`;
+      newCeiling = Math.min(m.base, newPrice * rule.factor);
+      delta = newCeiling - m.base;
+      const pct = m.base > 0 ? ((delta / m.base) * 100).toFixed(1) : 0;
+      deltaBadge = delta < -0.5
+        ? `<span class="delta-badge delta-neg">${pct}%</span>`
+        : `<span class="delta-badge delta-zero">0%</span>`;
+      newCeiling = Math.min(m.base, newCeiling); // floor at baseline
+    } else {
+      ruleLabel = rules.selfRule && mkt === trigger ? `<span class="rule-chip">${rules.selfRule}</span>` : '<span style="color:#ccc">No change</span>';
+      newCeiling = m.base;
+      deltaBadge = `<span class="delta-badge delta-zero">0%</span>`;
+    }
+
+    rows += `
+      <tr class="${rowClass}">
+        <td>${m.flag} ${m.name}</td>
+        <td>${ruleLabel}</td>
+        <td class="price-mono">${fmt(m.base)}</td>
+        <td class="price-mono">${fmt(newCeiling)}</td>
+        <td>${deltaBadge}</td>
+      </tr>`;
+  }
+
+  document.getElementById('cascadeBody').innerHTML = rows;
+  document.getElementById('cascadeNote').textContent = rules.note || '';
+}
+
+// ── Init ──
+runCascade();
+</script>
 </body>
 </html>
