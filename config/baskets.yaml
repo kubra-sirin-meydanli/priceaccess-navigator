@@ -1,0 +1,27 @@
+# Each market's IRP ceiling rule and basket.
+# rule: free (references no one), min (lowest of basket), average (mean of basket)
+# basket codes must match countries in data/baseline_prices.csv
+
+DE:
+  rule: free
+  basket: []
+
+FR:
+  rule: min
+  basket: [DE, UK, ES, NL, IT, BE, SE, AT, FI, PT]
+
+NL:
+  rule: average
+  basket: [FR, UK, BE, "NO"]
+
+UK:
+  rule: free
+  basket: []
+
+ES:
+  rule: min
+  basket: [DE, FR, UK, IT, PT]
+
+TR:
+  rule: min
+  basket: [FR, ES, GR, IT, PT]
