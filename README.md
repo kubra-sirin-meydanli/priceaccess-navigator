@@ -1,162 +1,96 @@
-<<<<<<< HEAD
-# priceaccess-navigator
-AI-augmented decision support for pharmaceutical pricing &amp; market access — IRP cascade simulation across 6 markets. [Live one-pager](https://kubra-sirin-meydanli.github.io/priceaccess-navigator/)
-=======
-# priceaccess-engine
+# PriceAccess Navigator
 
-**UC1 Price-Change Cascade Engine** — part of [PriceAccess Navigator](https://github.com/kubrameydanli/priceaccess-navigator), a personal portfolio project demonstrating pharmaceutical pricing and market-access analytics.
+AI-augmented decision support for pharmaceutical pricing & market access — IRP cascade simulation across 6 markets.
 
-> All data is synthetic. SyntaRelX is a fictitious IL-17A inhibitor; no real product prices are represented.
+[Live one-pager](https://kubra-sirin-meydanli.github.io/priceaccess-navigator/) · Built by Kubra Meydanli
 
 ---
 
-## What This Module Does
+## What this project is
 
-Models the mandatory ex-factory list-price (EFP) cascade that follows a regulated price reduction in one reference market. When a post-launch price renegotiation is concluded — triggered by AMNOG benefit assessment in Germany, CEPS arbitration in France, or a CIPM revision in Spain — other markets that hold IRP baskets referencing that country must reassess their own approved prices.
+A personal portfolio project demonstrating IRP (International Reference Pricing) cascade management logic across six European markets using a synthetic IL-17A biologic called SyntaRelX (modelled on secukinumab/Cosentyx), dispensed via hospital outpatient pharmacy channel. Not a commercial product.
 
-The engine applies **marginal transmission logic**: a market's approved price declines only by the extent to which the shocked EFP lowers its binding IRP ceiling. If the new reference price remains above a market's current approved price, no cascade occurs for that market in that iteration.
+---
 
-### Use-case scope
+## Use cases
 
-| Use case | Description | Status |
+| | Use case | Scope |
 |---|---|---|
-| **UC1** | Mandatory list-price cascade across IRP baskets (post-launch, full-basket trigger) | This module |
-| UC2 | Launch-sequence optimisation — ordering markets to minimise IRP exposure | Planned |
-| UC3 | HTA outcome stress test — simulating reimbursement delisting or step-therapy constraints | Planned |
+| UC1 | Mandatory list price cascade | Post-launch, full basket, regulatory trigger only |
+| UC2 | Launch sequence optimisation | Pre-launch, progressive basket fill |
+| UC3 | HTA outcome stress test | Post-launch, price erosion + volume restriction |
 
 ---
 
-## IRP Basket Coverage
+## Markets covered
 
-Six markets modelled. All prices are normalised to EUR (Turkey converted at the fixed MoH reference rate). Basket composition and the ceiling rule for each market are configurable in `config/baskets.yaml`.
-
-| Market | Regulatory anchor | Ceiling rule | IRP basket (markets referenced) | Price referenced |
-|---|---|---|---|---|
-| Germany | AMNOG benefit assessment → GKV-SV negotiated Erstattungsbetrag | Free pricing (no inbound IRP) | — (a reference *for* others; references none) | List (EFP) |
-| France | HAS (ASMR) → CEPS-negotiated price | Lowest of basket | Germany, UK, Spain, Netherlands, Italy, Belgium, Sweden, Austria, Finland, Portugal | List (EFP) |
-| Netherlands | WGP maximum price (IRP-based) / ZIN | Average of basket | France, UK, Belgium, Norway | List (EFP) |
-| UK | NICE appraisal / VPAG | Free pricing (no inbound IRP) | — (references none) | List (EFP) |
-| Spain | CIPM resolution | Lowest of basket | Germany, France, UK, Italy, Portugal | List (EFP) |
-| Turkey | TİTCK / MoH reference basket | Lowest of basket | France, Spain, Greece, Italy, Portugal | List (EFP), at the fixed MoH reference rate |
-
-Basket weights and active/inactive status are defined in `config/baskets.yaml`.
+| Market | Regulatory anchor | IRP role |
+|---|---|---|
+| DE | AMNOG / Erstattungsbetrag | Free pricing — trigger only |
+| FR | HAS / CEPS | Inbound IRP, lag 1 year |
+| NL | WGP / ZIN | Inbound IRP, lag 2 years |
+| UK | NICE / VPAS | Free pricing — trigger only |
+| ES | CIPM | Inbound IRP, lag 0 |
+| TR | TİTCK / SGK | Inbound IRP |
 
 ---
 
-## Core Logic
+## Synthetic asset
 
-```
-Shock input: (market, old_EFP, new_EFP, effective_date)
-                    │
-                    ▼
-        compute_binding_ceiling(market, baskets)
-          → min EFP across active basket members
-                    │
-                    ▼
-        marginal_transmission(current_approved_price,
-                              old_ceiling, new_ceiling)
-          → max(0, current_price - (old_ceiling - new_ceiling))
-                    │
-                    ▼
-        propagate to next-degree markets
-          (markets that reference the shocked market)
-                    │
-                    ▼
-        repeat until no further reduction propagates
-```
-
-**List vs net price distinction:** The model tracks both the approved list EFP and an estimated net price (list minus managed-entry agreement discount). IRP cross-references use list prices throughout, consistent with the predominant regulatory practice in the six markets covered. Net prices are reported separately and are not propagated.
-
----
-
-## Synthetic Asset
-
-**SyntaRelX** — IL-17A inhibitor archetype (specialty biologic, subcutaneous, 150 mg/mL auto-injector). Indication: moderate-to-severe plaque psoriasis. Launched sequentially across the six markets with synthetic list EFPs, net discount assumptions, and IRP trigger dates. All figures are illustrative and designed to produce non-trivial cascade behaviour for demonstration purposes.
-
-Reference prices and launch dates are defined in `data/syntarelx_baseline.csv`.
+**SyntaRelX** is a fictitious IL-17A inhibitor modelled on secukinumab (Cosentyx), used as the demonstration asset throughout this project. It is launched sequentially across the six markets with synthetic list EFPs, net discount assumptions, and IRP trigger dates. All figures are illustrative and designed to produce non-trivial cascade behaviour for demonstration purposes. No real product prices are represented.
 
 ---
 
 ## Validation
 
-The cascade model is validated against a hand-built Excel workbook (`validation/UC1_golden_model.xlsx`) that implements the same marginal transmission formula independently. The test suite compares engine output against the workbook's golden cases for each market and each cascade iteration.
+The cascade engine is validated against four pytest golden tests covering key scenarios: Spain CIPM trigger, German free-pricing (no cascade), no market rising, and pre-shock ceiling checks.
 
 ```bash
-pytest tests/test_uc1_golden.py -v
+pytest test_engine.py -v
 ```
 
-A mismatch between engine output and the golden workbook causes the test to fail with a per-market diff table.
-
----
-
-## Optional Narrative Output
-
-After the cascade completes, the engine can call the Claude API to produce a plain-English market-access memo summarising which markets were affected, by how much, and the policy rationale. This is a single, optional call; it has no effect on the numerical output.
-
-Set `NARRATIVE=true` in `.env` to enable it. Requires `ANTHROPIC_API_KEY`.
+A mismatch between engine output and the expected golden values causes the test to fail with a per-market diff.
 
 ---
 
 ## Stack
 
-- **Python 3.12** — all cascade logic
-- **pandas / numpy** — basket calculations and currency conversion
-- **pytest** — golden-case validation
-- **PyYAML** — basket and config files
-- **Anthropic Python SDK** — optional narrative generation (Claude API)
+- Python — cascade engine, impact model, narrative layer
+- Streamlit — interactive UI (in progress)
+- Claude API (Haiku) — C-suite narrative generation
+- pytest — golden test validation
+- Synthetic data only — no real pricing conclusions can be drawn
 
 ---
 
-## Setup
+## Key domain notes
 
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env          # fill in ANTHROPIC_API_KEY if using narrative
-```
-
-### Run a cascade
-
-```bash
-python -m engine.uc1 \
-  --market DE \
-  --old-efp 850.00 \
-  --new-efp 712.00 \
-  --effective-date 2025-01-01
-```
-
-### Run tests
-
-```bash
-pytest
-```
+- IRP operates on list (ex-factory) prices only — net/tender prices are tracked separately and never propagated
+- DE and UK are free-pricing markets — they trigger cascades but are never affected by inbound IRP
+- Cascade logic uses marginal transmission — a market's price falls only by the extent its binding IRP ceiling is lowered
 
 ---
 
-## Repository Layout
+## Repository layout
 
 ```
 priceaccess-engine/
-├── config/
-│   └── baskets.yaml          # basket composition per market
+├── CLAUDE.md               ← project briefing for Claude Code
+├── app.py                  ← Streamlit UI (in progress)
+├── engine.py               ← IRP cascade engine
+├── impact.py               ← 3-year NS/GM impact calculation
+├── load_data.py            ← unifies baseline prices + volume assumptions
+├── narrative.py            ← Claude API narrative generation
+├── test_engine.py          ← pytest golden tests
 ├── data/
-│   └── syntarelx_baseline.csv
-├── engine/
-│   ├── uc1.py                # cascade entry point
-│   ├── basket.py             # binding-ceiling calculation
-│   ├── transmission.py       # marginal transmission formula
-│   └── narrative.py          # optional Claude API call
-├── tests/
-│   └── test_uc1_golden.py
-├── validation/
-│   └── UC1_golden_model.xlsx
-├── .env.example
-└── requirements.txt
+│   ├── baseline_prices.csv
+│   └── volume_assumptions.csv
+├── config/
+│   └── baskets.yaml
+└── prompts/
+    └── narrative_uc1.txt
 ```
 
 ---
 
-## Part of PriceAccess Navigator
-
-PriceAccess Navigator is a portfolio project demonstrating analytical skills in pharmaceutical pricing strategy and market access. It is not a commercial product.
->>>>>>> 3c6cee7 (initial commit: engine, impact, narrative, UI scaffold, CLAUDE.md, prompts)
+> All data is synthetic. SyntaRelX is a fictitious IL-17A inhibitor. No real product prices are represented.
