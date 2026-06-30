@@ -1,8 +1,9 @@
 from load_data import load_prices, load_assumptions
 from engine import run_cascade, prices, baskets
 
-def compute_impact(trigger_market, new_price):
-    assumptions = load_assumptions()
+def compute_impact(trigger_market, new_price, assumptions=None):
+    if assumptions is None:
+        assumptions = load_assumptions()
     cascade_result = run_cascade(trigger_market, new_price, prices, baskets)
 
     markets = list(assumptions.keys())

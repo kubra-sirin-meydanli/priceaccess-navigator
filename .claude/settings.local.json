@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest test_engine.py -q)",
+      "Bash(python3 -c \"import ast; ast.parse\\(open\\('app.py'\\).read\\(\\)\\); print\\('syntax OK'\\)\")",
+      "Bash(/Users/kubrameydanli/Documents/priceaccess-engine/.venv/bin/streamlit --version)",
+      "Bash(/Users/kubrameydanli/Documents/priceaccess-engine/.venv/bin/python -c \"import streamlit as st; print\\(hasattr\\(st, 'segmented_control'\\)\\)\")"
+    ]
+  }
+}
