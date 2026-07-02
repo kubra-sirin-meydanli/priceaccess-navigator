@@ -37,6 +37,8 @@ def compute_impact(trigger_market, new_price, assumptions=None):
 
         rows.append({
             "market": market,
+            "list_asis": list_asis,
+            "list_after": list_after,
             "ns_asis": round(ns_asis),
             "gm_asis": round(gm_asis),
             "ns_after": round(ns_after),

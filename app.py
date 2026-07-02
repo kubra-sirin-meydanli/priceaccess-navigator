@@ -280,10 +280,10 @@ if step == "1  Where are we today?":
 
     # Hero + IRP table in one block so the divs actually wrap content
     st.markdown("""
-    <div class="hero">
-      <p class="hero-step">Step 1</p>
-      <p class="hero-title">Where are we today?</p>
-      <p class="hero-sub">Current list prices and IRP basket roles across all six markets. These are the baseline prices the cascade starts from.</p>
+    <div style='background-color:#f0ede8;padding:16px 20px;border-radius:4px;margin-bottom:8px;width:100%;box-sizing:border-box;'>
+      <p style='font-size:11px;font-weight:600;color:#999896;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;'>STEP 1</p>
+      <p style='font-size:16px;font-weight:600;color:#1a1a18;margin:0 0 4px;'>Where are we today?</p>
+      <p style='font-size:13px;color:#555553;margin:0;'>Current list prices and IRP basket roles across all six markets — the baseline the cascade starts from.</p>
     </div>
     <div class="content">
       <span class="sl">Current prices &amp; IRP basket roles</span>
@@ -344,12 +344,12 @@ if step == "1  Where are we today?":
 # ─────────────────────────────────────────────────────────────
 elif step == "2  What are we modelling?":
     st.markdown("""
-    <div class="hero">
-      <p class="hero-step">Step 2</p>
-      <p class="hero-title">What are we modelling?</p>
-      <p class="hero-sub">Choose a mode, select the trigger market, and set the new list price.</p>
-    </div>
-    """, unsafe_allow_html=True)
+<div style='background-color:#f0ede8;padding:16px 20px;border-radius:4px;margin-bottom:8px;width:100%;box-sizing:border-box;'>
+  <p style='font-size:11px;font-weight:600;color:#999896;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;'>STEP 2</p>
+  <p style='font-size:16px;font-weight:600;color:#1a1a18;margin:0 0 4px;'>What are we modelling?</p>
+  <p style='font-size:13px;color:#555553;margin:0;'>Choose a mode, select the trigger market, and set the new list price.</p>
+</div>
+""", unsafe_allow_html=True)
 
     mode = st.segmented_control(
         "input_mode",
@@ -444,169 +444,302 @@ elif step == "2  What are we modelling?":
 # STEP 3
 # ─────────────────────────────────────────────────────────────
 elif step == "3  What is the impact?":
-    st.markdown("""
-    <div class="hero">
-      <p class="hero-step">Step 3</p>
-      <p class="hero-title">What is the impact?</p>
-      <p class="hero-sub">Price transmission across IRP baskets · 3-year commercial impact · affected markets in red.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown('<div class="content">', unsafe_allow_html=True)
-
-    if st.session_state.results is None:
+    try:
         st.markdown("""
-        <div style="text-align:center;padding:60px 0;color:#bbb9b4;">
-          <p style="font-size:13px;">Run the cascade in Step 2 to see results here.</p>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        rows = st.session_state.results
-        trigger_market = st.session_state.trigger_market
-        new_price = st.session_state.new_price
+<div style='background-color:#f0ede8;padding:16px 20px;border-radius:4px;margin-bottom:8px;width:100%;box-sizing:border-box;'>
+  <p style='font-size:11px;font-weight:600;color:#999896;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;'>STEP 3</p>
+  <p style='font-size:16px;font-weight:600;color:#1a1a18;margin:0 0 4px;'>What is the impact?</p>
+  <p style='font-size:13px;color:#555553;margin:0;'>Price transmission across IRP baskets · 3-year commercial impact · affected markets in red.</p>
+</div>
+""", unsafe_allow_html=True)
 
-        total_ns_asis  = sum(r["ns_asis"]  for r in rows)
-        total_gm_asis  = sum(r["gm_asis"]  for r in rows)
-        total_ns_after = sum(r["ns_after"] for r in rows)
-        total_gm_after = sum(r["gm_after"] for r in rows)
-        total_delta_ns = sum(r["delta_ns"] for r in rows)
-        total_delta_gm = sum(r["delta_gm"] for r in rows)
-        total_dns_pct  = round(total_delta_ns / total_ns_asis * 100, 1)
-        total_dgm_pct  = round(total_delta_gm / total_gm_asis * 100, 1)
-        affected       = [r["market"] for r in rows if r["delta_ns"] != 0]
+        if st.session_state["results"] is None:
+            st.info("Run the cascade above to see results.")
+        else:
+            rows          = st.session_state["results"]
+            trigger_market = st.session_state["trigger_market"]
+            new_price      = st.session_state["new_price"]
 
-        original_price = BASELINES[trigger_market]
-        price_drop_pct = round((new_price - original_price) / original_price * 100, 1)
+            # Spacer: white gap between grey hero and metric cards
+            st.markdown('<div style="height:28px;background:#ffffff;"></div>', unsafe_allow_html=True)
 
-        # Metric cards
-        st.markdown('<span class="sl">Portfolio impact — 3-year summary</span>', unsafe_allow_html=True)
-        st.markdown(f"""
-        <div class="mg">
-          <div class="mc">
-            <p class="ml">Markets affected</p>
-            <p class="mv">{len(affected)} / 6</p>
-            <p class="ms">{' · '.join(affected) if affected else 'None'}</p>
-          </div>
-          <div class="mc">
-            <p class="ml">Max price drop</p>
-            <p class="mv mv-r">{price_drop_pct}%</p>
-            <p class="ms">{trigger_market} · €{original_price:,} → €{new_price:,.0f}</p>
-          </div>
-          <div class="mc">
-            <p class="ml">Δ Net sales 3Y</p>
-            <p class="mv mv-r">−€{abs(total_delta_ns):,.0f}</p>
-            <p class="ms">{total_dns_pct}% vs as-is portfolio</p>
-          </div>
-          <div class="mc">
-            <p class="ml">Δ Gross margin 3Y</p>
-            <p class="mv mv-r">−€{abs(total_delta_gm):,.0f}</p>
-            <p class="ms">{total_dgm_pct}% vs as-is portfolio</p>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
+            # B) Metric cards — all aggregates computed before any widget call
+            markets_affected = len([r for r in rows if r["delta_ns"] != 0])
+            total_count      = len(rows)
+            total_ns_delta   = sum(r["delta_ns"] for r in rows)
+            total_gm_delta   = sum(r["delta_gm"] for r in rows)
+            max_drop         = min(r["delta_ns_pct"] for r in rows)
 
-        # Unified table
-        st.markdown('<span class="sl">Market-by-market breakdown</span>', unsafe_allow_html=True)
-        trows = ""
-        for r in rows:
-            aff = r["delta_ns"] != 0
-            mc  = "aff" if aff else "m"
-            dc  = "neg" if aff else "neu"
-            trows += (
-                f"<tr>"
-                f"<td class='{mc}'>{r['market']}</td>"
-                f"<td class='r'>€{r['ns_asis']:,.0f}</td>"
-                f"<td class='r'>€{r['gm_asis']:,.0f}</td>"
-                f"<td class='r'>€{r['ns_after']:,.0f}</td>"
-                f"<td class='r'>€{r['gm_after']:,.0f}</td>"
-                f"<td class='{dc}'>{'−€{:,.0f}'.format(abs(r['delta_ns'])) if aff else '—'}</td>"
-                f"<td class='{dc}'>{'{}%'.format(r['delta_ns_pct']) if aff else '—'}</td>"
-                f"<td class='{dc}'>{'−€{:,.0f}'.format(abs(r['delta_gm'])) if aff else '—'}</td>"
-                f"<td class='{dc}'>{'{}%'.format(r['delta_gm_pct']) if aff else '—'}</td>"
-                f"</tr>"
+            def fmt_eur_m(val):
+                sign = "-" if val < 0 else ""
+                return f"{sign}€{abs(val) / 1_000_000:.1f}M"
+
+            c1, c2, c3, c4 = st.columns(4)
+            with c1:
+                st.metric("Markets affected",      f"{markets_affected} / {total_count}")
+            with c2:
+                st.metric("Total NS delta (3Y)",   fmt_eur_m(total_ns_delta))
+            with c3:
+                st.metric("Total GM delta (3Y)",   fmt_eur_m(total_gm_delta))
+            with c4:
+                st.metric("Max single-market drop", f"{max_drop:.1f}%")
+
+            # C) Placeholders — steps 2 / 3 / 4 will replace these blocks
+            # Note: st.markdown('---') is invisible because hr { display:none } is in global CSS.
+            # Using a border-top div as the visual divider instead — same appearance.
+
+            # --- Table: market-by-market cascade results (step 2) ---
+
+            # Totals for total row
+            total_ns_asis_t  = sum(r["ns_asis"]  for r in rows)
+            total_ns_after_t = sum(r["ns_after"] for r in rows)
+            total_delta_ns_t = sum(r["delta_ns"] for r in rows)
+            total_delta_ns_pct_t = round((total_delta_ns_t / total_ns_asis_t) * 100, 1) if total_ns_asis_t else 0.0
+
+            # Build tbody rows
+            rows_html = ""
+            for r in rows:
+                list_delta_pct = ((r["list_after"] - r["list_asis"]) / r["list_asis"]) * 100
+                is_affected = r["delta_ns"] != 0
+
+                if is_affected:
+                    row_bg     = "#FEF4F4"
+                    row_bdr    = "border-bottom:0.5px solid #FBDADA;"
+                    mkt_s      = "font-weight:600;color:#791F1F;"
+                    l_asis_s   = "color:#999896;"
+                    l_after_s  = "font-weight:600;color:#791F1F;"
+                    l_delta_s  = "color:#791F1F;"
+                    ns_asis_s  = "color:#999896;"
+                    ns_after_s = "font-weight:600;color:#791F1F;"
+                    dns_abs_s  = "color:#791F1F;"
+                    dns_pct_s  = "color:#791F1F;"
+                    l_delta_v  = f"{list_delta_pct:.1f}%"
+                    dns_abs_v  = (f"-€{abs(r['delta_ns']) / 1_000_000:.1f}M"
+                                  if r["delta_ns"] < 0
+                                  else f"€{r['delta_ns'] / 1_000_000:.1f}M")
+                    dns_pct_v  = f"{r['delta_ns_pct']:.1f}%"
+                else:
+                    row_bg     = "#ffffff"
+                    row_bdr    = "border-bottom:0.5px solid #e0ddd6;"
+                    mkt_s      = "color:#555553;"
+                    l_asis_s   = "color:#999896;"
+                    l_after_s  = "color:#999896;"
+                    l_delta_s  = "color:#cccccc;"
+                    ns_asis_s  = "color:#999896;"
+                    ns_after_s = "color:#999896;"
+                    dns_abs_s  = "color:#cccccc;"
+                    dns_pct_s  = "color:#cccccc;"
+                    l_delta_v  = "—"
+                    dns_abs_v  = "—"
+                    dns_pct_v  = "—"
+
+                rows_html += (
+                    f'<tr style="background:{row_bg};{row_bdr}">'
+                    f'<td style="padding:8px 10px;{mkt_s}">{r["market"]}</td>'
+                    f'<td style="padding:8px 10px;text-align:right;{l_asis_s}border-left:0.5px solid #e0ddd6;">{int(r["list_asis"])}</td>'
+                    f'<td style="padding:8px 10px;text-align:right;{l_after_s}">{int(r["list_after"])}</td>'
+                    f'<td style="padding:8px 10px;text-align:right;{l_delta_s}">{l_delta_v}</td>'
+                    f'<td style="padding:8px 10px;text-align:right;{ns_asis_s}border-left:0.5px solid #e0ddd6;">{r["ns_asis"] / 1_000_000:.1f}</td>'
+                    f'<td style="padding:8px 10px;text-align:right;{ns_after_s}">{r["ns_after"] / 1_000_000:.1f}</td>'
+                    f'<td style="padding:8px 10px;text-align:right;{dns_abs_s}">{dns_abs_v}</td>'
+                    f'<td style="padding:8px 10px;text-align:right;{dns_pct_s}">{dns_pct_v}</td>'
+                    f'</tr>'
+                )
+
+            # Total row
+            if total_delta_ns_t < 0:
+                t_abs   = f"-€{abs(total_delta_ns_t) / 1_000_000:.1f}M"
+                t_color = "#791F1F"
+            else:
+                t_abs   = f"€{total_delta_ns_t / 1_000_000:.1f}M"
+                t_color = "#1a1a18"
+            t_pct_color = "#791F1F" if total_delta_ns_t < 0 else "#1a1a18"
+
+            total_row_html = (
+                f'<tr style="background:#f5f3ee;border-top:1px solid #cccccc;font-weight:600;">'
+                f'<td style="padding:8px 10px;color:#1a1a18;">Total</td>'
+                f'<td style="padding:8px 10px;border-left:0.5px solid #e0ddd6;"></td>'
+                f'<td style="padding:8px 10px;"></td>'
+                f'<td style="padding:8px 10px;"></td>'
+                f'<td style="padding:8px 10px;text-align:right;color:#999896;border-left:0.5px solid #e0ddd6;">{total_ns_asis_t / 1_000_000:.1f}</td>'
+                f'<td style="padding:8px 10px;text-align:right;color:#1a1a18;">{total_ns_after_t / 1_000_000:.1f}</td>'
+                f'<td style="padding:8px 10px;text-align:right;color:{t_color};">{t_abs}</td>'
+                f'<td style="padding:8px 10px;text-align:right;color:{t_pct_color};">{total_delta_ns_pct_t:.1f}%</td>'
+                f'</tr>'
             )
 
-        st.markdown(f"""
-        <table class="t">
-          <thead>
-            <tr>
-              <th rowspan="2" style="width:7%;vertical-align:bottom;">Market</th>
-              <th colspan="2" class="r" style="border-bottom:none;padding-bottom:2px;">As is — 3Y</th>
-              <th colspan="2" class="r" style="border-bottom:none;padding-bottom:2px;">After change — 3Y</th>
-              <th colspan="4" class="r" style="border-bottom:none;padding-bottom:2px;color:#8C3B2A;">Delta — value at risk</th>
-            </tr>
-            <tr>
-              <th class="r">NS 3Y</th><th class="r">GM 3Y</th>
-              <th class="r">NS 3Y</th><th class="r">GM 3Y</th>
-              <th class="r">ΔNS</th><th class="r">ΔNS%</th>
-              <th class="r">ΔGM</th><th class="r">ΔGM%</th>
-            </tr>
-          </thead>
-          <tbody>
-            {trows}
-            <tr class="tot">
-              <td>Total</td>
-              <td class="r">€{total_ns_asis:,.0f}</td>
-              <td class="r">€{total_gm_asis:,.0f}</td>
-              <td class="r">€{total_ns_after:,.0f}</td>
-              <td class="r">€{total_gm_after:,.0f}</td>
-              <td class="neg">−€{abs(total_delta_ns):,.0f}</td>
-              <td class="neg">{total_dns_pct}%</td>
-              <td class="neg">−€{abs(total_delta_gm):,.0f}</td>
-              <td class="neg">{total_dgm_pct}%</td>
-            </tr>
-          </tbody>
-        </table>
-        """, unsafe_allow_html=True)
+            table_html = f"""
+<div style="border-top:0.5px solid #e8e6e1;margin-top:8px;"></div>
+<div style="padding:20px 48px 16px 48px;background:#ffffff;overflow-x:auto;">
+  <p style="font-size:12px;color:#999896;margin:0 0 10px 0;">Based on commercial assumptions set in step 1 · edit above and re-run to recalculate</p>
+  <div style="overflow-x:auto;margin-bottom:4px;">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;table-layout:fixed;border:0.5px solid #e0ddd6;">
+      <colgroup>
+        <col style="width:12.5%"><col style="width:12.5%"><col style="width:12.5%"><col style="width:12.5%">
+        <col style="width:12.5%"><col style="width:12.5%"><col style="width:12.5%"><col style="width:12.5%">
+      </colgroup>
+      <thead>
+        <tr style="background:#f0ede8;">
+          <th rowspan="2" style="padding:8px 10px;text-align:left;font-size:11px;font-weight:500;color:#999896;vertical-align:bottom;border-top:0.5px solid #e0ddd6;border-bottom:0.5px solid #e0ddd6;">Market</th>
+          <th colspan="3" style="padding:6px 10px;text-align:center;font-size:11px;font-weight:500;color:#1a1a18;border-left:0.5px solid #e0ddd6;border-bottom:3px solid #e0ddd6;">List price (EUR)</th>
+          <th colspan="4" style="padding:6px 10px;text-align:center;font-size:11px;font-weight:500;color:#1a1a18;border-left:0.5px solid #e0ddd6;border-bottom:3px solid #e0ddd6;">Net sales 3Y (EUR M)</th>
+        </tr>
+        <tr style="background:#f0ede8;border-bottom:0.5px solid #e0ddd6;">
+          <th style="padding:6px 10px;text-align:right;font-size:11px;font-weight:500;color:#999896;border-left:0.5px solid #e0ddd6;">As is</th>
+          <th style="padding:6px 10px;text-align:right;font-size:11px;font-weight:500;color:#999896;">After</th>
+          <th style="padding:6px 10px;text-align:right;font-size:11px;font-weight:500;color:#999896;">Δ%</th>
+          <th style="padding:6px 10px;text-align:right;font-size:11px;font-weight:500;color:#999896;border-left:0.5px solid #e0ddd6;">As is</th>
+          <th style="padding:6px 10px;text-align:right;font-size:11px;font-weight:500;color:#999896;">After</th>
+          <th style="padding:6px 10px;text-align:right;font-size:11px;font-weight:500;color:#999896;">Δ abs</th>
+          <th style="padding:6px 10px;text-align:right;font-size:11px;font-weight:500;color:#999896;">Δ%</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows_html}
+        {total_row_html}
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:10px;color:#999896;margin:4px 0 0 0;">* TR list price shown as EUR equivalent (fixed rate 1 EUR = 36.5 TRY, illustrative) · FR and NL reflect new price from Y2 onwards (transmission lag 1 year)</p>
+</div>"""
 
-        # Chart
-        st.markdown('<span class="sl" style="display:block;margin-top:28px;">3-year impact by market</span>', unsafe_allow_html=True)
+            st.markdown(table_html, unsafe_allow_html=True)
 
-        chart_metric = st.radio(
-            "chart_metric",
-            ["Net sales", "Gross margin"],
-            horizontal=True,
-            label_visibility="hidden",
-            key="chart_toggle",
-        )
+            # --- Chart: NS/GM toggle bar chart (step 3) ---
+            st.markdown(
+                '<div style="border-top:0.5px solid #e8e6e1;margin-top:4px;"></div>',
+                unsafe_allow_html=True,
+            )
 
-        markets_list = [r["market"] for r in rows]
-        if chart_metric == "Net sales":
-            asis_vals  = [r["ns_asis"]  for r in rows]
-            after_vals = [r["ns_after"] for r in rows]
-            y_label    = "Net Sales 3Y (€)"
-        else:
-            asis_vals  = [r["gm_asis"]  for r in rows]
-            after_vals = [r["gm_after"] for r in rows]
-            y_label    = "Gross Margin 3Y (€)"
+            hdr_left, hdr_right = st.columns([3, 1])
+            with hdr_left:
+                st.markdown(
+                    "<p style='font-size:14px; font-weight:600; color:#555553; margin:0; padding-top:6px;'>"
+                    "3-year delta by market"
+                    "</p>",
+                    unsafe_allow_html=True,
+                )
+            with hdr_right:
+                chart_metric = st.segmented_control(
+                    label="metric_toggle",
+                    options=["Net sales", "Gross margin"],
+                    default="Net sales",
+                    label_visibility="collapsed",
+                )
 
-        after_colors = ["#8C3B2A" if m in affected else "#c8c4bc" for m in markets_list]
+            if chart_metric == "Net sales":
+                deltas = [r["delta_ns"] / 1_000_000 for r in rows]
+                pcts   = [r["delta_ns_pct"] for r in rows]
+            else:
+                deltas = [r["delta_gm"] / 1_000_000 for r in rows]
+                pcts   = [r["delta_gm_pct"] for r in rows]
 
-        fig = go.Figure()
-        fig.add_trace(go.Bar(name="As is",        x=markets_list, y=asis_vals,  marker_color="#1a1a18", opacity=0.15))
-        fig.add_trace(go.Bar(name="After change",  x=markets_list, y=after_vals, marker_color=after_colors))
-        fig.update_layout(
-            barmode="group",
-            plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
-            font=dict(family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif", size=12, color="#555553"),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
-            margin=dict(l=0, r=0, t=32, b=0),
-            yaxis=dict(title=y_label, gridcolor="#f0ede8", gridwidth=0.5),
-            xaxis=dict(title=""),
-            height=300,
-        )
-        st.plotly_chart(fig, use_container_width=True)
+            markets     = [r["market"] for r in rows]
+            is_affected = [r["delta_ns"] != 0 for r in rows]
+            bar_colors  = ["#F09595" if affected else "#D3D1C7" for affected in is_affected]
 
-        # AI narrative
-        st.markdown('<span class="sl" style="display:block;margin-top:4px;">AI narrative summary</span>', unsafe_allow_html=True)
-        st.caption("Plain-English leadership memo · powered by Claude API · one deliberate click")
+            # Shared y-axis max across both metrics so toggling never rescales
+            y_max = max(
+                max(abs(r["delta_ns"]) for r in rows),
+                max(abs(r["delta_gm"]) for r in rows),
+            ) / 1_000_000
 
-        if st.session_state.narrative:
-            st.markdown(f'<div class="narr">{st.session_state.narrative}</div>', unsafe_allow_html=True)
+            bar_y       = [abs(d) for d in deltas]
+            bar_texts   = []
+            text_colors = []
+            for i, affected in enumerate(is_affected):
+                if affected:
+                    val  = deltas[i]
+                    pct  = pcts[i]
+                    sign = "-" if val < 0 else "+"
+                    bar_texts.append(
+                        f"{sign}€{abs(val):.1f}M<br><span style='font-size:10px'>{pct:.1f}%</span>"
+                    )
+                    text_colors.append("#791F1F")
+                else:
+                    bar_texts.append("0.0M")
+                    text_colors.append("#999896")
 
-        if st.button("Generate summary →", type="primary"):
-            with st.spinner("Generating narrative..."):
-                st.session_state.narrative = generate_narrative(trigger_market, new_price, rows)
-            st.rerun()
+            fig = go.Figure()
+            fig.add_trace(go.Bar(
+                x=markets,
+                y=bar_y,
+                marker_color=bar_colors,
+                text=bar_texts,
+                textposition="outside",
+                textfont=dict(size=11, color=text_colors),
+                hovertemplate="%{x}: %{y:.1f}M<extra></extra>",
+                cliponaxis=False,
+            ))
+            fig.update_layout(
+                height=300,
+                margin=dict(t=40, b=0, l=20, r=20),
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(
+                    family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+                    size=12,
+                ),
+                xaxis=dict(
+                    showgrid=False,
+                    showline=False,
+                    tickfont=dict(size=12, color="#555553"),
+                ),
+                yaxis=dict(
+                    showgrid=False,
+                    showline=False,
+                    showticklabels=False,
+                    zeroline=False,
+                    range=[0, y_max * 1.3],
+                ),
+                showlegend=False,
+                bargap=0.4,
+            )
+            st.plotly_chart(fig, config={"displayModeBar": False})
 
-    st.markdown('</div>', unsafe_allow_html=True)
+            # --- Narrative: AI narrative strip (step 4) ---
+            st.divider()
+
+            _narr_left, _narr_right = st.columns([4, 1], vertical_alignment="center")
+            with _narr_left:
+                st.markdown(
+                    "<p style='font-size:13px;font-weight:500;color:#1a1a18;margin:0;'>✦ AI narrative</p>"
+                    "<p style='font-size:11px;color:#999896;margin:2px 0 0;'>Leadership-ready memo · Pyramid Principle · generated by Claude</p>",
+                    unsafe_allow_html=True,
+                )
+            with _narr_right:
+                generate_clicked = st.button(
+                    "Generate", key="generate_narrative_btn", type="primary"
+                )
+
+            if generate_clicked:
+                with st.spinner("Generating narrative..."):
+                    try:
+                        st.session_state["narrative"] = generate_narrative(
+                            trigger_market, new_price, rows
+                        )
+                    except Exception as e:
+                        st.error(f"Could not generate narrative: {e}")
+                        st.session_state["narrative"] = None
+
+            if st.session_state.get("narrative"):
+                _lines = [l.strip() for l in st.session_state["narrative"].strip().split("\n") if l.strip()]
+                _html = []
+                for _line in _lines:
+                    if _line.startswith("**") and _line.endswith("**"):
+                        _html.append(f"<p style='font-size:15px;font-weight:700;color:#1a1a18;margin:10px 0 6px;'>{_line[2:-2]}</p>")
+                    elif _line.startswith("- "):
+                        _html.append(f"<p style='font-size:14px;color:#555553;margin:6px 0 6px 12px;'>• {_line[2:]}</p>")
+                    else:
+                        _html.append(f"<p style='font-size:14px;color:#555553;margin:3px 0;'>{_line}</p>")
+                st.markdown(
+                    f"<div style='padding: 8px 0 0 16px;'>{''.join(_html)}</div>",
+                    unsafe_allow_html=True,
+                )
+                st.markdown(
+                    "<div style='height: 40px;'></div>",
+                    unsafe_allow_html=True,
+                )
+
+    except Exception:
+        st.error("Could not render results. Check session state.")

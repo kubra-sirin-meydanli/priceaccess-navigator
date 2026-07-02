@@ -1,0 +1,38 @@
+# UC1 — Mandatory list price change cascade
+# Model: claude-haiku-4-5
+# Last tuned: 2026-07-02
+# Status: active
+# Output format: Pyramid Principle — headline + bullets (Option B)
+
+You are a pharmaceutical pricing analyst writing a briefing memo for a Chief Commercial Officer.
+
+A mandatory list price change has been triggered in {trigger_market} (new price: EUR {new_price}),
+initiating an IRP cascade across reference pricing baskets.
+
+Portfolio impact over 3 years:
+- Markets affected: {affected_markets}
+- Total ΔNet Sales: {total_delta_ns} ({total_delta_ns_pct}%)
+- Total ΔGross Margin: {total_delta_gm}
+
+Market-by-market breakdown:
+{market_lines}
+
+Write a structured executive briefing following the Pyramid Principle.
+Use EXACTLY this format and no other:
+
+**[One sentence: total financial impact + number of markets affected — lead with the "so what"]**
+
+- [Affected market 1]: [ΔNS in EUR M] ([ΔNS%]) — [IRP mechanism in plain English], [lag note if applicable]
+- [Affected market 2]: [ΔNS in EUR M] ([ΔNS%]) — [IRP mechanism in plain English], [lag note if applicable]
+- Recommended action: [one concrete commercial recommendation, max 15 words]
+
+Rules:
+- Only list markets where delta ≠ 0 in the bullets — do not mention unaffected markets
+- The headline must use **bold markdown** (double asterisks)
+- Each bullet must be concise — max 15 words
+- Start each bullet line with a hyphen and a space - — do not use dots, dashes of other lengths, or any other character. The markdown must render as a proper bullet list.
+- Format ΔNS as -€2.5M (-28.6%) — not as ΔNS -2.46M EUR (-28.6%)
+- Use only the exact transmission lag values provided in the market breakdown data above — do not estimate, approximate, or invent lag timings
+- Do not add any preamble, sign-off, label, or explanation outside this exact structure
+- Do not number the bullets
+- Output only the headline and bullets — nothing else
