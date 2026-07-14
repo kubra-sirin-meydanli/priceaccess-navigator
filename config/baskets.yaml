@@ -8,7 +8,7 @@ DE:
 
 FR:
   rule: min
-  basket: [DE, UK, ES, NL, IT, BE, SE, AT, FI, PT]
+  basket: [DE, IT, ES, UK]
 
 NL:
   rule: average

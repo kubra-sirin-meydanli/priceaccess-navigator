@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodology — PriceAccess Navigator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f9f8f5; color: #2C2C2A; line-height: 1.5; padding: 2rem 1rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 2.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: #E1F5EE; color: #085041; margin-bottom: 10px; }
+    h1 { font-size: 28px; font-weight: 600; color: #1a1a18; margin-bottom: 4px; }
+    .subtitle { font-size: 14px; color: #666662; margin-bottom: 1rem; }
+    .backlink { font-size: 12px; color: #0C447C; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 1.25rem; }
+    .backlink:hover { text-decoration: underline; }
+    hr { border: none; border-top: 0.5px solid #e0ddd6; margin: 1.5rem 0; }
+    .sec-title { font-size: 11px; font-weight: 600; color: #999896; text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: 6px; border-bottom: 0.5px solid #e0ddd6; margin-bottom: 14px; }
+    .card { background: #fff; border: 0.5px solid #e0ddd6; border-radius: 10px; padding: 1rem 1.25rem; }
+    .card-label { font-size: 11px; font-weight: 500; color: #999896; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .lede { font-size: 13px; color: #555553; line-height: 1.6; margin-bottom: 12px; }
+    .lede:last-child { margin-bottom: 0; }
+    .note { font-size: 12px; color: #999896; line-height: 1.5; margin-top: 10px; }
+    .tag { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 20px; margin: 2px 3px 2px 0; }
+    .tag-blue { background: #E6F1FB; color: #0C447C; }
+    .tag-teal { background: #E1F5EE; color: #085041; }
+    .tag-amber { background: #FAEEDA; color: #633806; }
+    .tag-purple { background: #EEEDFE; color: #3C3489; }
+    .tag-coral { background: #FAECE7; color: #712B13; }
+    .tag-grey { background: #f5f3ee; color: #666662; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th { text-align: left; font-size: 11px; font-weight: 600; color: #999896; text-transform: uppercase; letter-spacing: 0.04em; padding: 0 10px 8px 0; border-bottom: 0.5px solid #e0ddd6; }
+    th.r, td.r { text-align: right; padding-right: 0; }
+    td { padding: 9px 10px 9px 0; border-bottom: 0.5px solid #f0eee9; color: #555553; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr.tot td { border-top: 0.5px solid #e0ddd6; font-weight: 600; color: #1a1a18; }
+    td.mkt { font-weight: 600; color: #1a1a18; white-space: nowrap; }
+    td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .bind { color: #712B13; font-weight: 600; }
+    .zero { color: #999896; }
+    sup.src { font-size: 9.5px; color: #0C447C; font-weight: 600; }
+    code { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 11.5px; background: #f5f3ee; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+    .figure { border: 0.5px solid #e0ddd6; border-radius: 10px; padding: 1.25rem 1rem 0.75rem; background: #fdfdfc; }
+    .figure svg { width: 100%; height: auto; display: block; }
+    .fig-cap { font-size: 11.5px; color: #999896; text-align: center; margin-top: 8px; line-height: 1.45; }
+
+    .callout { border-left: 3px solid #1D9E75; background: #F4FBF8; border-radius: 0 8px 8px 0; padding: 0.9rem 1.1rem; }
+    .callout-title { font-size: 13px; font-weight: 600; color: #085041; margin-bottom: 5px; }
+    .callout-text { font-size: 13px; color: #555553; line-height: 1.55; }
+    .callout-amber { border-left-color: #C77E23; background: #FDF8F0; }
+    .callout-amber .callout-title { color: #633806; }
+
+    .uc-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+    .uc-row:last-child { margin-bottom: 0; }
+    .uc-num { font-size: 11px; font-weight: 600; width: 34px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .uc-text { font-size: 13px; color: #555553; line-height: 1.5; }
+    .uc-title { font-weight: 600; color: #1a1a18; }
+
+    .caveat-row { display: flex; gap: 9px; align-items: flex-start; margin-bottom: 10px; }
+    .caveat-row:last-child { margin-bottom: 0; }
+    .caveat-icon { font-size: 13px; color: #999896; flex-shrink: 0; margin-top: 3px; width: 14px; text-align: center; }
+    .caveat-text { font-size: 13px; color: #555553; line-height: 1.45; }
+    .caveat-title { font-weight: 600; color: #1a1a18; }
+
+    ol.sources { list-style: none; counter-reset: s; margin-top: 12px; }
+    ol.sources li { counter-increment: s; font-size: 11.5px; color: #999896; line-height: 1.5; padding-left: 22px; position: relative; margin-bottom: 8px; }
+    ol.sources li::before { content: counter(s); position: absolute; left: 0; top: 1px; font-weight: 600; color: #0C447C; font-size: 10px; }
+    ol.sources a { color: #0C447C; text-decoration: none; }
+    ol.sources a:hover { text-decoration: underline; }
+    ol.sources strong { color: #712B13; }
+
+    .footer-strip { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; padding-top: 1rem; border-top: 0.5px solid #e0ddd6; margin-top: 1.5rem; }
+    .footer-item { font-size: 12px; color: #999896; display: flex; align-items: center; gap: 5px; }
+    .footer-item a { color: #0C447C; text-decoration: none; }
+    .footer-item a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .two-col { grid-template-columns: 1fr; }
+      .page { padding: 1.25rem; }
+      table { font-size: 11.5px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <span class="badge">Methodology &amp; architecture</span>
+    <h1>How PriceAccess Navigator works</h1>
+    <p class="subtitle">Model logic, assumptions, and where they diverge from the real regulation</p>
+    <a class="backlink" href="./"><i class="fa-solid fa-arrow-left"></i> Back to overview</a>
+
+    <hr>
+
+    <p class="sec-title">Scope</p>
+    <div class="card">
+      <p class="lede"><strong>SyntaRelX</strong> is a fictional IL-17A biologic, built to resemble a mature specialty product with an established European footprint. It does not exist. Every price, volume and margin figure here is invented to exercise the model &mdash; no conclusion transfers to any real asset.</p>
+      <div>
+        <span class="tag tag-teal">6 modelled markets</span><span class="tag tag-blue">Reference markets held constant</span><span class="tag tag-purple">3-year horizon</span><span class="tag tag-coral">Ex-factory list price</span>
+      </div>
+      <p class="note">The engine works on <strong>ex-factory list prices</strong> &mdash; the prices reference baskets actually observe. Confidential net prices (Erstattungsbetrag arrangements, managed entry agreements, rebates) are invisible to referencing countries and play no part in the cascade. They enter only at the impact layer, through a gross-to-net assumption.</p>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">The IRP engine</p>
+    <p class="lede">Under International Reference Pricing a country sets its price against a basket of others. Change one price, and every market referencing it recalculates. The engine models that propagation &mdash; but what generates movement here is a transmission assumption, not the reference rule alone. That distinction matters more than anything else on this page, so it comes first.</p>
+
+    <div class="callout" style="margin-bottom:14px">
+      <p class="callout-title">The load-bearing assumption: marginal transmission</p>
+      <p class="callout-text">Every market in this dataset is priced <em>above</em> its basket minimum &mdash; France sits at €620 against a floor of €560, Türkiye at €195 against a floor of €310. That is what real markets look like: a reference price is one input to a negotiation, not a formula that fires on its own. A strict ceiling reading, where a price only moves once the cap falls beneath it, would therefore produce <strong>no cascade at all</strong>.<br><br>The engine instead applies <strong>marginal transmission</strong>: when a market's reference floor falls by €X, its price falls by €X, whether or not the floor was binding. The historical gap above the floor is preserved; only the <em>movement</em> travels. This is a behavioural claim about how regulators and manufacturers renegotiate against a lowered anchor &mdash; not a mechanical property of IRP, and the assumption most worth arguing with.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <p class="card-label">Basket composition &amp; calculation rule</p>
+      <table>
+        <thead>
+          <tr><th style="width:118px">Market</th><th style="width:74px">Rule</th><th>Reference basket</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mkt">DE · Germany</td><td><span class="tag tag-grey">free</span></td><td>References no one. Free pricing under AMNOG.<sup class="src">1</sup></td></tr>
+          <tr><td class="mkt">FR · France</td><td><span class="tag tag-teal">MIN</span></td><td>DE, IT, ES, UK<sup class="src">2</sup></td></tr>
+          <tr><td class="mkt">NL · Netherlands</td><td><span class="tag tag-blue">AVG</span></td><td>FR, UK, BE, NO<sup class="src">3</sup></td></tr>
+          <tr><td class="mkt">UK · United Kingdom</td><td><span class="tag tag-grey">free</span></td><td>References no one. Free pricing at launch.</td></tr>
+          <tr><td class="mkt">ES · Spain</td><td><span class="tag tag-teal">MIN</span></td><td>DE, FR, UK, IT, PT<sup class="src">4</sup></td></tr>
+          <tr><td class="mkt">TR · Türkiye</td><td><span class="tag tag-teal">MIN</span></td><td>FR, ES, GR, IT, PT &mdash; fixed pharmaceutical euro rate<sup class="src">5</sup></td></tr>
+        </tbody>
+      </table>
+      <p class="note"><strong>The sources below support the rule, not the result.</strong> They establish each market's basket and calculation method as a matter of public regulation. They do not support any figure this model produces &mdash; those come from fictional data. Where the implementation departs from the real rule, it is flagged rather than smoothed over.</p>
+      <ol class="sources">
+        <li>Under AMNOG the manufacturer prices freely for twelve months, after which an Erstattungsbetrag is negotiated with the GKV-SV. German international referencing is informal — one anchor among several in a negotiation, not a binding formula. <a href="https://www.simon-kucher.com/en/insights/international-reference-pricing-five-step-strategic-approach">Simon-Kucher, International reference pricing: a five-step strategic approach</a>. Accessed July 2026.</li>
+        <li><strong>Divergence — direction of the rule.</strong> France's real EU mechanism is the price guarantee in the CEPS–LEEM Accord Cadre: for ASMR I–III products the list price may not fall <em>below</em> the lowest price among Germany, Italy, Spain and the UK. It is a <em>floor</em> protecting the manufacturer, feeding a negotiation rather than firing as a formula. This model implements the same four countries as a MIN <em>ceiling</em> — treating the guaranteed floor as binding at revision. The basket is correct; the direction is a deliberate simplification, and it over-predicts French erosion. <a href="https://www.globallegalinsights.com/practice-areas/pricing-reimbursement-laws-and-regulations/france/">Pricing &amp; Reimbursement Laws 2025: France</a>. Accessed July 2026.</li>
+        <li>The Medicine Prices Act (Wgp) sets maximum prices from the arithmetic average across four reference countries, revised twice yearly. Germany was replaced by Norway in 2020, German prices sitting far above the Dutch average. <a href="https://www.government.nl/topics/medicines/keeping-medicines-affordable">Government of the Netherlands, Keeping medicines affordable</a>. Accessed July 2026.</li>
+        <li><strong>Rule sourced; basket unverified.</strong> Spain is documented as taking the lowest price across its reference countries, with the final price decision resting with the interministerial committee (CIPM) rather than the assessing agency. The MIN rule is therefore sourced. <em>The five-country composition used here is a modelling assumption and has not been verified against Spanish law</em> — the literature records which countries reference Spain, not which countries Spain references. It does not affect any figure on this page: in UC1 Spain is the trigger market, so its price is set by the mandate and its own basket is never evaluated. It would matter only in a scenario triggered elsewhere. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4802694/">Rémuzat et al., Overview of external reference pricing systems in Europe</a>. Accessed July 2026.</li>
+        <li>Confirmed against the decree: price is set at the lowest ex-manufacturer price among France, Spain, Italy, Portugal and Greece, converted at a government-set pharmaceutical euro rate deliberately held below the market rate. <a href="https://paksoy.av.tr/en/2025/06/pricing-of-medicinal-products-for-human-use-in-turkiye/">Paksoy, Pricing of medicinal products for human use in Türkiye</a>. Accessed July 2026.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <p class="card-label">Propagation</p>
+      <p class="lede"><strong>Iterates to a fixed point.</strong> France references the Netherlands and the Netherlands references France — a real cycle. The engine recalculates until nothing moves. Each price is derived from <em>baseline</em> values rather than current ones, so the system is monotone, floored at zero, and converges to a unique solution. It cannot ratchet.</p>
+      <p class="lede"><strong>Free markets never receive.</strong> Germany and the UK reference no one, so nothing propagates into them. Both still sit in other markets' baskets, so they can transmit.</p>
+      <p class="lede"><strong>Reference markets are held constant.</strong> Countries appearing in baskets but outside the six — Italy, Belgium, Portugal, Greece, Norway — supply prices and never update. A scope decision with real consequences: see the limitations.</p>
+      <p class="lede"><strong>Rules live in data, not code.</strong> Baskets and calculation methods sit in <code>baskets.yaml</code>, so they can be reviewed and corrected by a domain expert without touching Python. That matters — this model's France basket was wrong until it was audited against the Accord Cadre, and the fix was one line.</p>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">The finding: the binding reference is rarely the market you are watching</p>
+    <p class="lede">Spain is cut 29%, €560 to €400, by a mandated CIPM decision. It is the only decision anyone takes. Here is what the six markets actually do.</p>
+
+    <div class="figure" style="margin-bottom:12px">
+      <svg viewBox="0 0 720 292" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cascade result: Spain cut 160 euros; France falls 160, Netherlands 40, Turkiye zero, Germany and UK zero">
+        <g font-family="sans-serif">
+          <text x="10" y="15" font-size="10" fill="#999896" letter-spacing="0.5">TRIGGER</text>
+          <rect x="8" y="24" width="150" height="54" rx="8" fill="#FAECE7" stroke="#712B13" stroke-width="0.5"/>
+          <text x="24" y="46" font-size="12.5" font-weight="600" fill="#712B13">ES · Spain</text>
+          <text x="24" y="66" font-size="12" fill="#712B13">€560 → €400</text>
+          <text x="142" y="66" font-size="12" font-weight="600" fill="#712B13" text-anchor="end">−160</text>
+
+          <line x1="166" y1="51" x2="176" y2="51" stroke="#c9c6bf" stroke-width="1.2"/>
+          <line x1="176" y1="51" x2="176" y2="242" stroke="#c9c6bf" stroke-width="1.2"/>
+          <line x1="176" y1="51" x2="190" y2="51" stroke="#c9c6bf" stroke-width="1.2"/>
+          <line x1="176" y1="115" x2="190" y2="115" stroke="#c9c6bf" stroke-width="1.2"/>
+          <line x1="176" y1="179" x2="190" y2="179" stroke="#c9c6bf" stroke-width="1.2"/>
+          <line x1="176" y1="242" x2="190" y2="242" stroke="#c9c6bf" stroke-width="1.2"/>
+
+          <text x="196" y="15" font-size="10" fill="#999896" letter-spacing="0.5">DOWNSTREAM</text>
+
+          <rect x="192" y="24" width="226" height="54" rx="8" fill="#E1F5EE" stroke="#085041" stroke-width="0.5"/>
+          <text x="208" y="46" font-size="12.5" font-weight="600" fill="#085041">FR · France</text>
+          <text x="208" y="66" font-size="12" fill="#085041">€620 → €460</text>
+          <text x="402" y="66" font-size="12" font-weight="600" fill="#085041" text-anchor="end">−160</text>
+
+          <rect x="192" y="88" width="226" height="54" rx="8" fill="#E6F1FB" stroke="#0C447C" stroke-width="0.5"/>
+          <text x="208" y="110" font-size="12.5" font-weight="600" fill="#0C447C">NL · Netherlands</text>
+          <text x="208" y="130" font-size="12" fill="#0C447C">€582 → €542</text>
+          <text x="402" y="130" font-size="12" font-weight="600" fill="#0C447C" text-anchor="end">−40</text>
+
+          <rect x="192" y="152" width="226" height="54" rx="8" fill="#fdfdfc" stroke="#c9c6bf" stroke-width="0.5"/>
+          <text x="208" y="174" font-size="12.5" font-weight="600" fill="#666662">TR · Türkiye</text>
+          <text x="208" y="194" font-size="12" fill="#666662">€195 → €195</text>
+          <text x="402" y="194" font-size="12" font-weight="600" fill="#666662" text-anchor="end">0</text>
+
+          <rect x="192" y="216" width="226" height="50" rx="8" fill="#fdfdfc" stroke="#c9c6bf" stroke-width="0.5"/>
+          <text x="208" y="238" font-size="12.5" font-weight="600" fill="#666662">DE · UK</text>
+          <text x="208" y="256" font-size="10.5" fill="#999896">free pricing — reference no one</text>
+          <text x="402" y="245" font-size="12" font-weight="600" fill="#666662" text-anchor="end">0</text>
+
+          <text x="436" y="48" font-size="11" fill="#666662">Spain is France's binding reference.</text>
+          <text x="436" y="64" font-size="11" fill="#999896">The cut transmits in full — one year later.</text>
+
+          <text x="436" y="112" font-size="11" fill="#666662">A four-country average dilutes the French</text>
+          <text x="436" y="128" font-size="11" fill="#999896">move to a quarter of its size. Two years later.</text>
+
+          <text x="436" y="176" font-size="11" fill="#712B13" font-weight="600">Greece (€310) already binds.</text>
+          <text x="436" y="192" font-size="11" fill="#999896">Spain never reaches the floor.</text>
+        </g>
+      </svg>
+      <p class="fig-cap">Figure 1 &mdash; UC1 cascade. One decision, taken in Spain. Two markets move; the one you would expect does not.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom:12px">
+      <p class="callout-title">Türkiye does not move — and that is the point</p>
+      <p class="callout-text">Spain sits <em>directly</em> in Türkiye's basket, on a MIN rule. Intuition says a 29% Spanish cut must hit Türkiye hard. It does nothing at all. Greece is priced at €310 — already below Spain's post-cut €400 — so Greece binds the Turkish floor both before and after. Spain never becomes the minimum, and Türkiye never recalculates.<br><br>The market with the most direct exposure to Spain on paper turns out to have none. <strong>Under a MIN rule only the binding reference matters, and it is rarely the market on the agenda.</strong> This is what a basket-aware model tells you and a spreadsheet of bilateral relationships does not.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-label">Baseline prices &amp; binding references</p>
+      <table>
+        <thead>
+          <tr><th style="width:118px">Market</th><th style="width:86px">List (€)</th><th style="width:106px">Basket floor</th><th>Bound by</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mkt">DE · Germany</td><td class="num">1,164</td><td class="num">&mdash;</td><td>free pricing</td></tr>
+          <tr><td class="mkt">FR · France</td><td class="num">620</td><td class="num">560</td><td>Spain</td></tr>
+          <tr><td class="mkt">NL · Netherlands</td><td class="num">582</td><td class="num">650 (avg)</td><td>France is 1 of 4 inputs</td></tr>
+          <tr><td class="mkt">UK · United Kingdom</td><td class="num">700</td><td class="num">&mdash;</td><td>free pricing</td></tr>
+          <tr><td class="mkt">ES · Spain</td><td class="num">560</td><td class="num">480</td><td>Portugal</td></tr>
+          <tr><td class="mkt">TR · Türkiye</td><td class="num">195</td><td class="num">310</td><td class="bind">Greece — not Spain</td></tr>
+        </tbody>
+      </table>
+      <p class="note"><strong>Germany is not a cascade source. It is a cascade cliff.</strong> At €1,164 it sits nearly double the next market, so under a MIN rule it can never bind France or Spain — it would have to fall by more than half first. A German cut of €234 propagates nothing, and the model's golden tests assert exactly that. An AMNOG "no additional benefit" outcome forcing a steep cut is the one event that makes Germany the binding reference for several markets simultaneously — which is why manufacturers have withdrawn products from Germany rather than accept the cut and let it travel.<sup class="src">1</sup></p>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">What it costs</p>
+    <p class="lede">Cascade prices flow into the commercial layer: list → gross-to-net → volume → gross margin, per market, per year, with each market's transmission lag applied. Three-year totals for the Spanish cut above.</p>
+
+    <div class="callout callout-amber" style="margin-bottom:12px">
+      <p class="callout-title">Where these numbers come from</p>
+      <p class="callout-text">This table is the output of the <strong>default demo dataset</strong> shipped with the app — the fictional SyntaRelX baseline in <code>baseline_prices.csv</code> and <code>volume_assumptions.csv</code>. It is one scenario, not a fixed result. Every input behind it is editable in the app: baseline list prices, year-one volumes, volume growth, gross-to-net percentage, gross margin percentage, and each market's transmission lag. Change any of them and the figures below change with them.<br><br>What does <em>not</em> change is the structure: which market binds which, and therefore which markets move at all. That is set by the baskets and the rules, not by the commercial assumptions.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <table>
+        <thead>
+          <tr><th style="width:118px">Market</th><th style="width:70px">Lag</th><th class="r" style="width:110px">Δ Net sales</th><th class="r" style="width:66px">Δ NS%</th><th class="r" style="width:110px">Δ Gross margin</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mkt">ES · Spain</td><td>year 0</td><td class="num r">−€2,457,324</td><td class="num r">−28.6%</td><td class="num r">−€1,720,126</td></tr>
+          <tr><td class="mkt">FR · France</td><td>year 1</td><td class="num r">−€2,382,981</td><td class="num r">−17.5%</td><td class="num r">−€1,668,087</td></tr>
+          <tr><td class="mkt">NL · Netherlands</td><td>year 2</td><td class="num r">−€141,906</td><td class="num r">−2.4%</td><td class="num r">−€100,753</td></tr>
+          <tr><td class="mkt zero">TR · Türkiye</td><td class="zero">—</td><td class="num r zero">€0</td><td class="num r zero">0.0%</td><td class="num r zero">€0</td></tr>
+          <tr><td class="mkt zero">DE · Germany</td><td class="zero">—</td><td class="num r zero">€0</td><td class="num r zero">0.0%</td><td class="num r zero">€0</td></tr>
+          <tr><td class="mkt zero">UK · United Kingdom</td><td class="zero">—</td><td class="num r zero">€0</td><td class="num r zero">0.0%</td><td class="num r zero">€0</td></tr>
+          <tr class="tot"><td class="mkt">Total</td><td></td><td class="num r">−€4,982,210</td><td class="num r">−6.0%</td><td class="num r">−€3,488,966</td></tr>
+        </tbody>
+      </table>
+      <p class="note">France's price falls the same €160 as Spain's, but its three-year damage is smaller in percentage terms because the one-year lag spares it the first year. The Netherlands only feels year three. Volume is held constant — a mandated cut is a price event, not a demand event.</p>
+    </div>
+
+    <div class="callout callout-amber">
+      <p class="callout-title">Downstream exposure exceeds the decision itself</p>
+      <p class="callout-text">Spain's own loss is <strong>€2.46M</strong>. France and the Netherlands together lose <strong>€2.52M</strong> — slightly more. A commercial team assessing the Spanish CIPM decision on its own terms sees less than half of what it actually costs, and the remainder lands in years two and three, after the budget cycle that approved it has closed.<br><br>That is the case for modelling the basket rather than the market.</p>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">What counts as a trigger</p>
+    <div class="two-col">
+      <div class="card">
+        <p class="card-label" style="color:#085041">Modelled — mandatory</p>
+        <table>
+          <tbody>
+            <tr><td class="mkt" style="width:84px">CIPM</td><td>ES — interministerial price decision</td></tr>
+            <tr><td class="mkt">CEPS</td><td>FR — negotiated price revision</td></tr>
+            <tr><td class="mkt">AMNOG</td><td>DE — benefit assessment outcome</td></tr>
+            <tr><td class="mkt">ZIN / HAS</td><td>NL / FR — HTA anchors (UC3)</td></tr>
+            <tr><td class="mkt">TİTCK / SGK</td><td>TR — pricing &amp; reimbursement anchors</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <p class="card-label" style="color:#712B13">Excluded — not modelled</p>
+        <div class="caveat-row"><i class="fa-solid fa-xmark caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Voluntary price reductions</span> — commercially chosen, not regulator-imposed</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-xmark caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Confidential rebates</span> — invisible to baskets by construction</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-xmark caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Price freezes &amp; special agreements</span> — suspend the mechanism</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-xmark caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Political overrides</span> — not reducible to rules</p></div>
+        <p class="note">Excluding voluntary cuts is deliberate. A voluntary reduction is a lever a company may choose to pull; a mandated cut is an event it must absorb. Mixing the two makes the exposure figure unactionable.</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">The three use cases</p>
+    <div class="card">
+      <div class="uc-row"><span class="uc-num tag-blue">UC1</span><span class="uc-text"><span class="uc-title">Mandatory price change cascade</span> — post-launch, baskets fully populated. A regulator mandates a cut; the engine recalculates every market referencing it, over three years. <em>The demo case, above.</em></span></div>
+      <div class="uc-row"><span class="uc-num tag-teal">UC2</span><span class="uc-text"><span class="uc-title">Launch sequence optimisation</span> — pre-launch, baskets fill progressively. Launch order determines which prices are visible when each subsequent market sets its own. The sequence is the decision.</span></div>
+      <div class="uc-row"><span class="uc-num tag-amber">UC3</span><span class="uc-text"><span class="uc-title">HTA outcome stress test</span> — post-launch. A restricted or negative HTA decision applies price erosion <em>and</em> volume restriction together, then propagates the price component onward.</span></div>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">Architecture</p>
+    <div class="figure">
+      <svg viewBox="0 0 720 316" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three-layer application architecture over a deterministic Python core">
+        <g font-family="sans-serif">
+          <rect x="6" y="8" width="600" height="60" rx="8" fill="#fdfdfc" stroke="#e0ddd6" stroke-width="0.5"/>
+          <text x="24" y="31" font-size="12" font-weight="600" fill="#1a1a18">Layer 1 — Baseline</text>
+          <text x="24" y="50" font-size="11" fill="#666662">Current price strip · commercial assumptions (GTN%, GM%, volume, growth, lag) · editable</text>
+          <rect x="616" y="8" width="98" height="60" rx="8" fill="#E1F5EE" stroke="#085041" stroke-width="0.5"/>
+          <text x="665" y="33" font-size="10.5" font-weight="600" fill="#085041" text-anchor="middle">load_data.py</text>
+          <text x="665" y="50" font-size="10" fill="#085041" text-anchor="middle">CSV + YAML</text>
+
+          <rect x="6" y="78" width="600" height="60" rx="8" fill="#fdfdfc" stroke="#e0ddd6" stroke-width="0.5"/>
+          <text x="24" y="101" font-size="12" font-weight="600" fill="#1a1a18">Layer 2 — Scenario</text>
+          <text x="24" y="120" font-size="11" fill="#666662">Trigger market · new price · horizon · mode: demo data / manual edit</text>
+          <rect x="616" y="78" width="98" height="60" rx="8" fill="#E6F1FB" stroke="#0C447C" stroke-width="0.5"/>
+          <text x="665" y="103" font-size="10.5" font-weight="600" fill="#0C447C" text-anchor="middle">engine.py</text>
+          <text x="665" y="120" font-size="10" fill="#0C447C" text-anchor="middle">fixed-point</text>
+
+          <rect x="6" y="148" width="600" height="78" rx="8" fill="#fdfdfc" stroke="#e0ddd6" stroke-width="0.5"/>
+          <text x="24" y="171" font-size="12" font-weight="600" fill="#1a1a18">Layer 3 — Results</text>
+          <text x="24" y="190" font-size="11" fill="#666662">Metric cards · cascade table (old → new, Δ, binding reference) · NS/GM toggle chart</text>
+          <text x="24" y="209" font-size="11" fill="#666662">AI narrative strip — Pyramid Principle memo</text>
+          <rect x="616" y="148" width="98" height="36" rx="8" fill="#FAEEDA" stroke="#633806" stroke-width="0.5"/>
+          <text x="665" y="171" font-size="10.5" font-weight="600" fill="#633806" text-anchor="middle">impact.py</text>
+          <rect x="616" y="190" width="98" height="36" rx="8" fill="#EEEDFE" stroke="#3C3489" stroke-width="0.5"/>
+          <text x="665" y="213" font-size="10.5" font-weight="600" fill="#3C3489" text-anchor="middle">narrative.py</text>
+
+          <line x1="16" y1="68" x2="16" y2="78" stroke="#c9c6bf" stroke-width="1"/>
+          <line x1="16" y1="138" x2="16" y2="148" stroke="#c9c6bf" stroke-width="1"/>
+
+          <rect x="6" y="238" width="708" height="66" rx="8" fill="#f5f3ee" stroke="#e0ddd6" stroke-width="0.5"/>
+          <text x="24" y="261" font-size="11" font-weight="600" fill="#1a1a18">Foundation</text>
+          <text x="24" y="280" font-size="11" fill="#666662">Python 3.11 · Streamlit · Plotly · pandas · pytest   ·   baskets.yaml — IRP rules as data, not code</text>
+          <text x="24" y="296" font-size="10.5" fill="#999896">Claude API (claude-haiku-4-5) — narrative generation only. It reads the cascade output; it does not compute it.</text>
+        </g>
+      </svg>
+      <p class="fig-cap">Figure 2 &mdash; Three UI layers over a deterministic, unit-tested Python core. Four golden tests guard the cascade logic.</p>
+    </div>
+
+    <hr>
+
+    <p class="sec-title">Where the AI sits — and where it does not</p>
+    <div class="two-col">
+      <div class="card">
+        <p class="card-label" style="color:#085041">The AI does</p>
+        <div class="caveat-row"><i class="fa-solid fa-check caveat-icon" style="color:#1D9E75"></i><p class="caveat-text">Read the completed cascade table and impact figures</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-check caveat-icon" style="color:#1D9E75"></i><p class="caveat-text">Structure them as a C-suite memo — answer first, supporting logic after</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-check caveat-icon" style="color:#1D9E75"></i><p class="caveat-text">Frame regulatory exposure in net sales and gross margin terms</p></div>
+      </div>
+      <div class="card">
+        <p class="card-label" style="color:#712B13">The AI does not</p>
+        <div class="caveat-row"><i class="fa-solid fa-xmark caveat-icon"></i><p class="caveat-text">Calculate the cascade — that is deterministic Python, unit-tested</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-xmark caveat-icon"></i><p class="caveat-text">Parse or infer IRP rules — they live in <code>baskets.yaml</code>, readable by anyone</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-xmark caveat-icon"></i><p class="caveat-text">Produce figures of its own — every number it cites comes from the engine</p></div>
+      </div>
+    </div>
+    <p class="note">This split is the design decision I would defend hardest. Pricing logic that a regulator or a finance team might interrogate has to be reproducible and testable. The language model sits downstream of the maths, never inside it. Its output is advisory and requires expert human review before any commercial decision.</p>
+
+    <hr>
+
+    <p class="sec-title">Limitations &amp; roadmap</p>
+    <div class="two-col">
+      <div>
+        <div class="caveat-row"><i class="fa-solid fa-database caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Synthetic data only</span> — no real pricing conclusion follows from any output</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-arrow-down-short-wide caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Marginal transmission, not strict ceiling</span> — the assumption that generates the cascade at all. See the engine section.</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-flag caveat-icon"></i><p class="caveat-text"><span class="caveat-title">France is modelled as a ceiling, not a floor</span> — correct basket, inverted direction. Over-predicts French erosion. See source 2.</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-snowflake caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Reference markets are held constant</span> — Greece pins Türkiye's floor and never moves. A real Greek price would itself fall, so the model <em>understates</em> true cascade depth.</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-clock caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Lags are per market, applied after convergence</span> — a market that would move twice across a real multi-round revision cycle is credited with one lagged move</p></div>
+      </div>
+      <div>
+        <div class="caveat-row"><i class="fa-solid fa-circle-question caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Spain's basket is unverified</span> — the MIN rule is sourced, the five-country composition is an assumption. Does not affect UC1, where Spain is the trigger. See source 4.</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-microscope caveat-icon"></i><p class="caveat-text"><span class="caveat-title">HTA thresholds are heuristics</span> — qualitative and political factors excluded</p></div>
+        <div class="caveat-row"><i class="fa-solid fa-layer-group caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Does not generalise across therapeutic areas for free</span> — a different TA needs category-specific rules layered on this engine. "More data through the same engine" would be an overclaim.</p></div>
+        <div class="card" style="background:#fdfdfc;margin-top:12px">
+          <p class="card-label">Roadmap — not built</p>
+          <div class="caveat-row"><i class="fa-solid fa-dice caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Monte Carlo</span> — probabilistic ranges rather than point estimates</p></div>
+          <div class="caveat-row"><i class="fa-solid fa-file-excel caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Excel upload</span> — bring your own baseline</p></div>
+          <div class="caveat-row"><i class="fa-solid fa-diagram-project caveat-icon"></i><p class="caveat-text"><span class="caveat-title">Sankey view</span> — cascade as a flow diagram</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-strip">
+      <span class="footer-item"><i class="fa-solid fa-user"></i> Kubra Meydanli</span>
+      <span class="footer-item"><i class="fa-solid fa-file-lines"></i> Methodology · v1.1 · July 2026</span>
+      <span class="footer-item"><i class="fa-solid fa-arrow-left"></i> <a href="./">Back to overview</a></span>
+      <span class="footer-item"><i class="fa-solid fa-globe"></i> <a href="https://priceaccess-navigator.streamlit.app">Open the app</a></span>
+    </div>
+
+  </div>
+</body>
+</html>

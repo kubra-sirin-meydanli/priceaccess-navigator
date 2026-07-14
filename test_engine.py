@@ -3,8 +3,8 @@ from engine import run_cascade, compute_binding_ceiling, prices, baskets
 def test_spain_cascade():
     result = run_cascade("ES", 400, prices, baskets)
     assert result["ES"] == 400
-    assert result["FR"] == 540
-    assert result["NL"] == 562
+    assert result["FR"] == 460
+    assert result["NL"] == 542
     assert result["DE"] == 1164
     assert result["UK"] == 700
     assert result["TR"] == 195
@@ -29,6 +29,6 @@ def test_no_market_rises():
 
 def test_pre_shock_ceilings():
     # The ceiling function reproduces the Excel pre-shock ceilings
-    assert compute_binding_ceiling("FR", prices, baskets) == 480
+    assert compute_binding_ceiling("FR", prices, baskets) == 560
     assert compute_binding_ceiling("NL", prices, baskets) == 650
     assert compute_binding_ceiling("DE", prices, baskets) is None
